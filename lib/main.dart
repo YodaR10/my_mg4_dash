@@ -77,6 +77,7 @@ class _LensImagePageState extends State<LensImagePage> {
   ];
 
   int index = 0;
+  bool fabOpened = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +90,29 @@ class _LensImagePageState extends State<LensImagePage> {
         items: items,
         selectedIndex: index,
         onChanged: (i) => setState(() => index = i),
+      ),
+      floatingActionButton: LiquidGlassMorph(
+        alignment: Alignment.bottomRight,
+        motion: LiquidGlassMorphMotion.fluid,
+        child: fabOpened
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LiquidGlassFab(
+                    onPressed: () {},
+                    child: const Icon(Icons.camera_alt_rounded),
+                  ),
+                  const SizedBox(height: 12),
+                  LiquidGlassFab(
+                    onPressed: () => setState(() => fabOpened = false),
+                    child: const Icon(Icons.close),
+                  ),
+                ],
+              )
+            : LiquidGlassFab(
+                onPressed: () => setState(() => fabOpened = true),
+                child: const Icon(Icons.add_rounded),
+              ),
       ),
       body: LiquidGlassView(
         backgroundWidget: const _Background(url: _imageUrl),
