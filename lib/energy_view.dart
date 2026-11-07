@@ -15,6 +15,7 @@ class EnergyView extends StatefulWidget {
 class _EnergyViewState extends State<EnergyView> {
   // Top-left of each draggable shape — placed close so they start fused.
   Offset _card = const Offset(40, 170);
+  Offset _charge = const Offset(40, 300);
   Offset _circle = const Offset(60, 270);
   Offset _squircle = const Offset(150, 320);
 
@@ -26,6 +27,8 @@ class _EnergyViewState extends State<EnergyView> {
     saturation: 1.05,
     blur: 3,
   );
+
+  double volume = 0.5; // Valore iniziale del volume (da 0.0 a 1.0)
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +46,60 @@ class _EnergyViewState extends State<EnergyView> {
                 children: [
                   _draggable(
                     pos: _card,
-                    size: Size(248.w, 120.h),
+                    size: Size(220.w, 110.h),
                     shape: const LiquidGlassShape.continuousRoundedRectangle(
                       cornerRadius: 32,
                     ),
                     onMove: (d) => setState(() => _card += d),
-                    child: const LiquidGlassControlCard(
-                      level: 0.4,
-                      icon: Icons.light_mode_rounded,
-                      iconColor: Colors.yellow,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 22.w,
+                        vertical: 22.h,
+                      ),
+                      child: Column(
+                        children: [
+                          LiquidGlassControlCard(
+                            level: 0.40,
+                            icon: Icons.battery_charging_full_rounded,
+                            iconColor: Colors.greenAccent,
+                            orientation: ControlOrientation.horizontal,
+                            height: 40.h,
+                            width: 200.w,
+                          ),
+                          Text(
+                            '40% - Charging',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _draggable(
+                    pos: _charge,
+                    size: Size(220.w, 110.h),
+                    shape: const LiquidGlassShape.continuousRoundedRectangle(
+                      cornerRadius: 32,
+                    ),
+                    onMove: (d) => setState(() => _charge += d),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 22.w,
+                        vertical: 22.h,
+                      ),
+                      child: Column(
+                        children: [
+                          LiquidGlassSlider(
+                            value: volume,
+                            onChanged: (v) => setState(() => volume = v),
+                            //onChangeEnd: (v) => savePreference(v),
+                            activeColor: Colors.white,
+                            width: 280.w,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   _draggable(
