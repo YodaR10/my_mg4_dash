@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_demo/demo_view.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
+import 'energy_view.dart';
+
 // =============================================================
 // Liquid Glass Easy — headline example: lens over image, blended.
 //
@@ -74,10 +76,6 @@ class _LensImagePageState extends State<LensImagePage> {
       minTextAdapt: true,
       builder: (context, child) {
         return LiquidGlassScaffold(
-          appBar: LiquidGlassAppBar(
-            title: const Text('Lens over image'),
-            foregroundColor: Colors.white,
-          ),
           bottomNavigationBar: LiquidGlassTabBar(
             itemStyle: LiquidGlassTabItemStyle(
               iconSize: 25.w,
@@ -119,7 +117,15 @@ class _LensImagePageState extends State<LensImagePage> {
                     child: Icon(Icons.abc_sharp, size: 20.w),
                   ),
           ),
-          body: DemoView(),
+          body: switch (index) {
+            0 => DemoView(0),
+            1 => const EnergyView(),
+            2 => DemoView(2),
+            3 => DemoView(3),
+            4 => DemoView(4),
+            5 => DemoView(5),
+            _ => DemoView(0),
+          },
         );
       },
     );

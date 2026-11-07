@@ -5,19 +5,21 @@ import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 import 'animated_background.dart';
 
 class DemoView extends StatefulWidget {
-  const DemoView({super.key});
+  int _index = 0;
+
+  DemoView(int index, {super.key}) {
+    _index = index;
+  }
 
   @override
-  State<DemoView> createState() => _DemoViewState();
+  State<DemoView> createState() => _DemoViewState(_index);
 }
 
 class _DemoViewState extends State<DemoView> {
-  // Busy detail makes the refraction easy to read as the glass passes over it.
-  // Served from the project's asset repo (same source as the other demos).
-  static const String _imageUrl =
-      'https://raw.githubusercontent.com/AhmeedGamil/liquid_glass_easy_assets'
-      '/main/blending.jpg';
-
+  int _index = 0;
+  _DemoViewState(int index) {
+    _index = index;
+  }
   // Top-left of each draggable shape — placed close so they start fused.
   Offset _card = const Offset(40, 170);
   Offset _circle = const Offset(60, 270);
@@ -34,56 +36,62 @@ class _DemoViewState extends State<DemoView> {
 
   @override
   Widget build(BuildContext context) {
-    return LiquidGlassView(
-      // backgroundWidget: const _Background(url: _imageUrl),
-      backgroundWidget: const AnimatedBackground(),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: LiquidGlassBlender(
-              smoothness: 58,
-              style: _groupStyle,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  _draggable(
-                    pos: _card,
-                    size: Size(248.w, 120.h),
-                    shape: const LiquidGlassShape.continuousRoundedRectangle(
-                      cornerRadius: 32,
+    return LiquidGlassScaffold(
+      appBar: LiquidGlassAppBar(
+        title: Text('Page ${_index + 1}'),
+        foregroundColor: Colors.white,
+      ),
+      body: LiquidGlassView(
+        // backgroundWidget: const _Background(url: _imageUrl),
+        backgroundWidget: const AnimatedBackground(),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: LiquidGlassBlender(
+                smoothness: 58,
+                style: _groupStyle,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    _draggable(
+                      pos: _card,
+                      size: Size(248.w, 120.h),
+                      shape: const LiquidGlassShape.continuousRoundedRectangle(
+                        cornerRadius: 32,
+                      ),
+                      onMove: (d) => setState(() => _card += d),
+                      child: const _CardContent(),
                     ),
-                    onMove: (d) => setState(() => _card += d),
-                    child: const _CardContent(),
-                  ),
-                  _draggable(
-                    pos: _circle,
-                    size: Size(120.w, 120.h),
-                    shape: const LiquidGlassShape.roundedRectangle(
-                      cornerRadius: 60,
+                    _draggable(
+                      pos: _circle,
+                      size: Size(120.w, 120.h),
+                      shape: const LiquidGlassShape.roundedRectangle(
+                        cornerRadius: 60,
+                      ),
+                      onMove: (d) => setState(() => _circle += d),
+                      child: Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.white,
+                        size: 38.w,
+                      ),
                     ),
-                    onMove: (d) => setState(() => _circle += d),
-                    child: Icon(
-                      Icons.favorite_rounded,
-                      color: Colors.white,
-                      size: 38.w,
+                    _draggable(
+                      pos: _squircle,
+                      size: Size(140.w, 140.h),
+                      shape: const LiquidGlassShape.squircle(cornerRadius: 40),
+                      onMove: (d) => setState(() => _squircle += d),
+                      child: Icon(
+                        Icons.bolt_rounded,
+                        color: Colors.white,
+                        size: 40.w,
+                      ),
                     ),
-                  ),
-                  _draggable(
-                    pos: _squircle,
-                    size: Size(140.w, 140.h),
-                    shape: const LiquidGlassShape.squircle(cornerRadius: 40),
-                    onMove: (d) => setState(() => _squircle += d),
-                    child: Icon(
-                      Icons.bolt_rounded,
-                      color: Colors.white,
-                      size: 40.w,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
