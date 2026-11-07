@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -30,30 +30,14 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Sfondo animato tramite Painter
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: MyBackgroundPainter(_controller.value),
-                child: Container(),
-              );
-            },
-          ),
-          // Contenuto della tua pagina
-          Center(
-            child: Text(
-              "Contenuto in primo piano",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: WavePainter(_controller.value),
+            child: Container(),
+          );
+        },
       ),
     );
   }
@@ -71,7 +55,7 @@ class MyBackgroundPainter extends CustomPainter {
 
     // Esempio semplice: un cerchio che si muove in base all'animazione
     final center = Offset(
-      size.width * 0.5 + (sin(animationValue * 2 * pi) * 100),
+      size.width * 0.5 + (math.sin(animationValue * 2 * math.pi) * 100),
       size.height * 0.5,
     );
 
@@ -82,4 +66,104 @@ class MyBackgroundPainter extends CustomPainter {
   bool shouldRepaint(covariant MyBackgroundPainter oldDelegate) {
     return oldDelegate.animationValue != animationValue;
   }
+}
+
+class WavePainter extends CustomPainter {
+  final double progress;
+
+  WavePainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Sfondo di base scuro per far risaltare i colori fluo/neon delle onde
+    final bgPaint = Paint()
+      ..color = const Color(0xFF0F172A)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), bgPaint);
+
+    // Definiamo un set di onde con colori, ampiezze e frequenze diverse
+    final waves = [
+      WaveConfig(
+        color: Colors.cyanAccent.withOpacity(0.4),
+        amplitude: 30.0,
+        frequency: 1.5,
+        phaseShift: progress * 2 * math.pi,
+        verticalOffset: size.height * 0.5,
+      ),
+      WaveConfig(
+        color: Colors.purpleAccent.withOpacity(0.4),
+        amplitude: 45.0,
+        frequency: 1.0,
+        phaseShift: (progress * 2 * math.pi) + (math.pi / 3),
+        verticalOffset: size.height * 0.55,
+      ),
+      WaveConfig(
+        color: Colors.blueAccent.withOpacity(0.3),
+        amplitude: 25.0,
+        frequency: 2.0,
+        phaseShift: (progress * 2 * math.pi) - (math.pi / 2),
+        verticalOffset: size.height * 0.45,
+      ),
+      WaveConfig(
+        color: Colors.pinkAccent.withOpacity(0.25),
+        amplitude: 50.0,
+        frequency: 0.8,
+        phaseShift: (progress * 2 * math.pi) + math.pi,
+        verticalOffset: size.height * 0.6,
+      ),
+    ];
+
+    for (var wave in waves) {
+      final paint = Paint()
+        ..color = wave.color
+        ..style = PaintingStyle.fill;
+
+      final path = Path();
+      path.moveTo(0, size.height);
+
+      // Generazione dei punti dell'onda lungo la larghezza dello schermo
+      for (double x = 0; x <= size.width; x += 5) {
+        // Formula sinusoidale combinata
+        final double normalizedX = x / size.width;
+        final double y =
+            wave.verticalOffset +
+            math.sin(
+                  (normalizedX * wave.frequency * 2 * math.pi) +
+                      wave.phaseShift,
+                ) *
+                wave.amplitude +
+            math.cos(normalizedX * math.pi + progress * math.pi) * 10;
+
+        path.lineTo(x, y);
+      }
+
+      // Chiudiamo il tracciato verso il basso per riempire l'area sottostante
+      path.lineTo(size.width, size.height);
+      path.lineTo(0, size.height);
+      path.close();
+
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant WavePainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
+}
+
+class WaveConfig {
+  final Color color;
+  final double amplitude;
+  final double frequency;
+  final double phaseShift;
+  final double verticalOffset;
+
+  WaveConfig({
+    required this.color,
+    required this.amplitude,
+    required this.frequency,
+    required this.phaseShift,
+    required this.verticalOffset,
+  });
 }
