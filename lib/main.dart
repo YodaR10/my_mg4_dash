@@ -70,15 +70,25 @@ class _LensImagePageState extends State<LensImagePage> {
     blur: 3,
   );
 
+  final items = [
+    LiquidGlassTabBarItem(label: 'Home', icon: Icons.home_rounded),
+    LiquidGlassTabBarItem(label: 'Search', icon: Icons.search_rounded),
+    LiquidGlassTabBarItem(label: 'Settings', icon: Icons.settings_rounded),
+  ];
+
+  int index = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
+    return LiquidGlassScaffold(
+      appBar: LiquidGlassAppBar(
         title: const Text('Lens over image'),
-        backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
-        elevation: 0,
+      ),
+      bottomNavigationBar: LiquidGlassTabBar(
+        items: items,
+        selectedIndex: index,
+        onChanged: (i) => setState(() => index = i),
       ),
       body: LiquidGlassView(
         backgroundWidget: const _Background(url: _imageUrl),
