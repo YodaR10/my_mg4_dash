@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
 // =============================================================
@@ -81,102 +82,112 @@ class _LensImagePageState extends State<LensImagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return LiquidGlassScaffold(
-      appBar: LiquidGlassAppBar(
-        title: const Text('Lens over image'),
-        foregroundColor: Colors.white,
-      ),
-      bottomNavigationBar: LiquidGlassTabBar(
-        items: items,
-        selectedIndex: index,
-        onChanged: (i) => setState(() => index = i),
-      ),
-      floatingActionButton: LiquidGlassMorph(
-        alignment: Alignment.bottomRight,
-        motion: LiquidGlassMorphMotion.fluid,
-        child: fabOpened
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  LiquidGlassFab(
-                    onPressed: () {},
-                    child: const Icon(Icons.camera_alt_rounded),
-                  ),
-                  const SizedBox(height: 12),
-                  LiquidGlassFab(
-                    onPressed: () => setState(() => fabOpened = false),
-                    child: const Icon(Icons.close),
-                  ),
-                ],
-              )
-            : LiquidGlassFab(
-                onPressed: () => setState(() => fabOpened = true),
-                child: const Icon(Icons.add_rounded),
-              ),
-      ),
-      body: LiquidGlassView(
-        backgroundWidget: const _Background(url: _imageUrl),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: LiquidGlassBlender(
-                smoothness: 58,
-                style: _groupStyle,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    _draggable(
-                      pos: _card,
-                      size: const Size(248, 120),
-                      shape: const LiquidGlassShape.continuousRoundedRectangle(
-                        cornerRadius: 32,
-                      ),
-                      onMove: (d) => setState(() => _card += d),
-                      child: const _CardContent(),
-                    ),
-                    _draggable(
-                      pos: _circle,
-                      size: const Size(120, 120),
-                      shape: const LiquidGlassShape.roundedRectangle(
-                        cornerRadius: 60,
-                      ),
-                      onMove: (d) => setState(() => _circle += d),
-                      child: const Icon(
-                        Icons.favorite_rounded,
-                        color: Colors.white,
-                        size: 38,
-                      ),
-                    ),
-                    _draggable(
-                      pos: _squircle,
-                      size: const Size(140, 140),
-                      shape: const LiquidGlassShape.squircle(cornerRadius: 40),
-                      onMove: (d) => setState(() => _squircle += d),
-                      child: const Icon(
-                        Icons.bolt_rounded,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return ScreenUtilInit(
+      designSize: const Size(960, 360),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return LiquidGlassScaffold(
+          appBar: LiquidGlassAppBar(
+            title: const Text('Lens over image'),
+            foregroundColor: Colors.white,
+          ),
+          bottomNavigationBar: LiquidGlassTabBar(
+            itemStyle: LiquidGlassTabItemStyle(
+              iconSize: 25.w,
+              axis: Axis.horizontal,
+              labelFontSize: 14.sp,
             ),
-            const Positioned(
-              left: 20,
-              right: 20,
-              bottom: 24,
-              child: IgnorePointer(
-                child: Text(
-                  'Drag the glass shapes together to blend',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
+            height: 40.h,
+            width: 300.w,
+            items: items,
+            selectedIndex: index,
+            onChanged: (i) => setState(() => index = i),
+          ),
+          floatingActionButton: LiquidGlassMorph(
+            alignment: Alignment.bottomRight,
+            motion: LiquidGlassMorphMotion.fluid,
+            child: fabOpened
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      LiquidGlassFab(
+                        size: 40.w,
+                        iconSize: 25.w,
+                        onPressed: () {},
+                        child: Icon(Icons.camera_alt_rounded, size: 20.w),
+                      ),
+                      const SizedBox(height: 12),
+                      LiquidGlassFab(
+                        size: 40.w,
+                        iconSize: 25.w,
+                        onPressed: () => setState(() => fabOpened = false),
+                        child: const Icon(Icons.close),
+                      ),
+                    ],
+                  )
+                : LiquidGlassFab(
+                    size: 40.w,
+                    iconSize: 25.w,
+                    onPressed: () => setState(() => fabOpened = true),
+                    child: Icon(Icons.abc_sharp, size: 20.w),
+                  ),
+          ),
+          body: LiquidGlassView(
+            backgroundWidget: const _Background(url: _imageUrl),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: LiquidGlassBlender(
+                    smoothness: 58,
+                    style: _groupStyle,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        _draggable(
+                          pos: _card,
+                          size: Size(248.w, 120.h),
+                          shape:
+                              const LiquidGlassShape.continuousRoundedRectangle(
+                                cornerRadius: 32,
+                              ),
+                          onMove: (d) => setState(() => _card += d),
+                          child: const _CardContent(),
+                        ),
+                        _draggable(
+                          pos: _circle,
+                          size: Size(120.w, 120.h),
+                          shape: const LiquidGlassShape.roundedRectangle(
+                            cornerRadius: 60,
+                          ),
+                          onMove: (d) => setState(() => _circle += d),
+                          child: Icon(
+                            Icons.favorite_rounded,
+                            color: Colors.white,
+                            size: 38.w,
+                          ),
+                        ),
+                        _draggable(
+                          pos: _squircle,
+                          size: Size(140.w, 140.h),
+                          shape: const LiquidGlassShape.squircle(
+                            cornerRadius: 40,
+                          ),
+                          onMove: (d) => setState(() => _squircle += d),
+                          child: Icon(
+                            Icons.bolt_rounded,
+                            color: Colors.white,
+                            size: 40.w,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -209,8 +220,8 @@ class _CardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 22),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 22.w),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,14 +230,14 @@ class _CardContent extends StatelessWidget {
             'Liquid Glass',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 22,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w800,
             ),
           ),
           SizedBox(height: 4),
           Text(
             'Refraction over a live photo',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: TextStyle(color: Colors.white70, fontSize: 14.sp),
           ),
         ],
       ),
