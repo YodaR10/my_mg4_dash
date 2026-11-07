@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
+import 'animated_background.dart';
+
 class DemoView extends StatefulWidget {
   const DemoView({super.key});
 
@@ -33,7 +35,8 @@ class _DemoViewState extends State<DemoView> {
   @override
   Widget build(BuildContext context) {
     return LiquidGlassView(
-      backgroundWidget: const _Background(url: _imageUrl),
+      // backgroundWidget: const _Background(url: _imageUrl),
+      backgroundWidget: const AnimatedBackground(),
       child: Stack(
         children: [
           Positioned.fill(
