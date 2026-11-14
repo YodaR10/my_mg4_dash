@@ -132,7 +132,9 @@ class WavePainter extends CustomPainter {
                       wave.phaseShift,
                 ) *
                 wave.amplitude +
-            math.cos(normalizedX * math.pi + progress * math.pi) * 10;
+            // progress * 2 * pi (non pi) per completare un ciclo intero:
+            // al reset 1 -> 0 il valore e la velocita' restano continui
+            math.cos(normalizedX * math.pi + progress * 2 * math.pi) * 10;
 
         path.lineTo(x, y);
       }
