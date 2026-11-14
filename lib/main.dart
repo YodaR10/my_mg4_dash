@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_demo/demo_view.dart';
+import 'package:liquid_glass_demo/home/home_view.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
 import 'energy_view.dart';
@@ -67,7 +68,6 @@ class _LensImagePageState extends State<LensImagePage> {
   ];
 
   int index = 0;
-  bool fabOpened = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,37 +88,8 @@ class _LensImagePageState extends State<LensImagePage> {
             selectedIndex: index,
             onChanged: (i) => setState(() => index = i),
           ),
-          floatingActionButton: LiquidGlassMorph(
-            alignment: Alignment.bottomRight,
-            motion: LiquidGlassMorphMotion.fluid,
-            child: fabOpened
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LiquidGlassFab(
-                        size: 40.w,
-                        iconSize: 25.w,
-                        onPressed: () {},
-                        child: Icon(Icons.camera_alt_rounded, size: 20.w),
-                      ),
-                      const SizedBox(height: 12),
-                      LiquidGlassFab(
-                        size: 40.w,
-                        iconSize: 25.w,
-                        onPressed: () => setState(() => fabOpened = false),
-                        child: const Icon(Icons.close),
-                      ),
-                    ],
-                  )
-                : LiquidGlassFab(
-                    size: 40.w,
-                    iconSize: 25.w,
-                    onPressed: () => setState(() => fabOpened = true),
-                    child: Icon(Icons.abc_sharp, size: 20.w),
-                  ),
-          ),
           body: switch (index) {
-            0 => DemoView(0),
+            0 => const HomeView(),
             1 => const EnergyView(),
             2 => DemoView(2),
             3 => DemoView(3),

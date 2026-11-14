@@ -261,9 +261,18 @@ chrome/cards/controls, keep text contrast, test light/dark, avoid nested glass.
 ## Current project structure
 
 - `lib/main.dart` — `ScreenUtilInit` → `LiquidGlassScaffold`, glass tab bar,
-  morphing FAB, body switched by tab index.
+  body switched by tab index (FAB is no longer global).
+- `lib/home/home_view.dart` — homepage shell: `LiquidGlassView` over
+  `AnimatedBackground` with the dashboard grid.
+- `lib/home/home_dashboard.dart` — 4-column × 2-row layout. Every slot is a
+  widget parameter with a default module, so cards can be swapped without
+  touching geometry.
+- `lib/home/modules/` — one file per mock card (`navigation`, `android_auto`,
+  `radio`, `climate`, `ambient`, `apps`); all static, no real actions.
+- `lib/home/widgets/` — shared `HomeGlassTile` surface, module header and
+  translucent action pill (no nested glass inside a tile).
 - `lib/demo_view.dart` — draggable lens playground over `AnimatedBackground`,
-  fused by `LiquidGlassBlender(smoothness: 58)`.
+  fused by `LiquidGlassBlender(smoothness: 58)`; owns the morphing FAB.
 - `lib/energy_view.dart` — same pattern plus `LiquidGlassSlider` and
   `LiquidGlassControlCard`.
 - `lib/control_card.dart` — capsule `LiquidGlassLens` with a white progress

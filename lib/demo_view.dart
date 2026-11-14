@@ -19,6 +19,8 @@ class _DemoViewState extends State<DemoView> {
   Offset _circle = const Offset(60, 270);
   Offset _squircle = const Offset(150, 320);
 
+  bool _fabOpened = false;
+
   // The merged material: clear glass (NO blur), slight tint + saturation, an
   // optical rim and a gentle optical refraction.
   static const _groupStyle = LiquidGlassStyle(
@@ -34,6 +36,35 @@ class _DemoViewState extends State<DemoView> {
       appBar: LiquidGlassAppBar(
         title: Text('Page ${widget.index + 1}'),
         foregroundColor: Colors.white,
+      ),
+      floatingActionButton: LiquidGlassMorph(
+        alignment: Alignment.bottomRight,
+        motion: LiquidGlassMorphMotion.fluid,
+        child: _fabOpened
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LiquidGlassFab(
+                    size: 40.w,
+                    iconSize: 25.w,
+                    onPressed: () {},
+                    child: Icon(Icons.camera_alt_rounded, size: 20.w),
+                  ),
+                  const SizedBox(height: 12),
+                  LiquidGlassFab(
+                    size: 40.w,
+                    iconSize: 25.w,
+                    onPressed: () => setState(() => _fabOpened = false),
+                    child: const Icon(Icons.close),
+                  ),
+                ],
+              )
+            : LiquidGlassFab(
+                size: 40.w,
+                iconSize: 25.w,
+                onPressed: () => setState(() => _fabOpened = true),
+                child: Icon(Icons.abc_sharp, size: 20.w),
+              ),
       ),
       body: LiquidGlassView(
         backgroundWidget: const AnimatedBackground(),
@@ -142,4 +173,3 @@ class _CardContent extends StatelessWidget {
     );
   }
 }
-
