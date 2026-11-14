@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_demo/demo_view.dart';
 import 'package:liquid_glass_demo/home/home_view.dart';
+import 'package:liquid_glass_demo/settings/app_settings.dart';
+import 'package:liquid_glass_demo/settings/settings_view.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
 import 'energy_view.dart';
@@ -33,17 +35,42 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  AppSettings _settings = const AppSettings();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      applySystemUi(_settings);
+    });
+  }
+
+  void _updateSettings(AppSettings value) {
+    if (value == _settings) return;
+    setState(() => _settings = value);
+    applySystemUi(value);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(useMaterial3: true),
-      darkTheme: ThemeData.dark(useMaterial3: true),
-      themeMode: ThemeMode.system,
-      home: const LensImagePage(),
+    return AppSettingsScope(
+      settings: _settings,
+      update: _updateSettings,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(useMaterial3: true),
+        darkTheme: ThemeData.dark(useMaterial3: true),
+        themeMode: _settings.themeMode,
+        home: const LensImagePage(),
+      ),
     );
   }
 }
@@ -108,7 +135,7 @@ class _LensImagePageState extends State<LensImagePage> {
             2 => DemoView(2),
             3 => DemoView(3),
             4 => DemoView(4),
-            5 => DemoView(5),
+            5 => const SettingsView(),
             _ => DemoView(0),
           },
         );
