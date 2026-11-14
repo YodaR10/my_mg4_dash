@@ -33,7 +33,6 @@ class _EnergyViewState extends State<EnergyView> {
   @override
   Widget build(BuildContext context) {
     return LiquidGlassView(
-      // backgroundWidget: const _Background(url: _imageUrl),
       backgroundWidget: const AnimatedBackground(),
       child: Stack(
         children: [
@@ -159,82 +158,3 @@ class _EnergyViewState extends State<EnergyView> {
   }
 }
 
-class _CardContent extends StatelessWidget {
-  const _CardContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 22.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Liquid Glass',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.sp,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Refraction over a live photo',
-            style: TextStyle(color: Colors.white70, fontSize: 14.sp),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// The refractable background captured by [LiquidGlassView]: the network photo
-/// (with a gradient fallback) plus a soft scrim for text legibility.
-class _Background extends StatelessWidget {
-  final String url;
-  const _Background({required this.url});
-
-  static const _fallback = DecoratedBox(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Color(0xFF2E1065), Color(0xFF0EA5E9), Color(0xFFF59E0B)],
-      ),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.network(
-          url,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => _fallback,
-          loadingBuilder: (context, child, progress) {
-            if (progress == null) return child;
-            return const Stack(
-              fit: StackFit.expand,
-              children: [
-                _fallback,
-                Center(child: CircularProgressIndicator(color: Colors.white)),
-              ],
-            );
-          },
-        ),
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0x33000000), Color(0x66000000)],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

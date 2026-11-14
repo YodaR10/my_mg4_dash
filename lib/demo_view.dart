@@ -5,21 +5,15 @@ import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 import 'animated_background.dart';
 
 class DemoView extends StatefulWidget {
-  int _index = 0;
+  final int index;
 
-  DemoView(int index, {super.key}) {
-    _index = index;
-  }
+  const DemoView(this.index, {super.key});
 
   @override
-  State<DemoView> createState() => _DemoViewState(_index);
+  State<DemoView> createState() => _DemoViewState();
 }
 
 class _DemoViewState extends State<DemoView> {
-  int _index = 0;
-  _DemoViewState(int index) {
-    _index = index;
-  }
   // Top-left of each draggable shape — placed close so they start fused.
   Offset _card = const Offset(40, 170);
   Offset _circle = const Offset(60, 270);
@@ -38,11 +32,10 @@ class _DemoViewState extends State<DemoView> {
   Widget build(BuildContext context) {
     return LiquidGlassScaffold(
       appBar: LiquidGlassAppBar(
-        title: Text('Page ${_index + 1}'),
+        title: Text('Page ${widget.index + 1}'),
         foregroundColor: Colors.white,
       ),
       body: LiquidGlassView(
-        // backgroundWidget: const _Background(url: _imageUrl),
         backgroundWidget: const AnimatedBackground(),
         child: Stack(
           children: [
@@ -150,52 +143,3 @@ class _CardContent extends StatelessWidget {
   }
 }
 
-/// The refractable background captured by [LiquidGlassView]: the network photo
-/// (with a gradient fallback) plus a soft scrim for text legibility.
-class _Background extends StatelessWidget {
-  final String url;
-  const _Background({required this.url});
-
-  static const _fallback = DecoratedBox(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Color(0xFF2E1065), Color(0xFF0EA5E9), Color(0xFFF59E0B)],
-      ),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.network(
-          url,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => _fallback,
-          loadingBuilder: (context, child, progress) {
-            if (progress == null) return child;
-            return const Stack(
-              fit: StackFit.expand,
-              children: [
-                _fallback,
-                Center(child: CircularProgressIndicator(color: Colors.white)),
-              ],
-            );
-          },
-        ),
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0x33000000), Color(0x66000000)],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

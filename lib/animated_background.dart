@@ -17,7 +17,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 10),
+      duration: const Duration(seconds: 10),
     )..repeat(); // Ripete l'animazione all'infinito
   }
 
@@ -29,16 +29,16 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return CustomPaint(
-            painter: WavePainter(_controller.value),
-            child: Container(),
-          );
-        },
-      ),
+    // Plain background widget: `LiquidGlassScaffold` owns the page shell and
+    // `LiquidGlassView` uses this as its refractable `backgroundWidget`.
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: WavePainter(_controller.value),
+          child: const SizedBox.expand(),
+        );
+      },
     );
   }
 }
