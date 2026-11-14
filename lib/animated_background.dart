@@ -84,28 +84,28 @@ class WavePainter extends CustomPainter {
     // Definiamo un set di onde con colori, ampiezze e frequenze diverse
     final waves = [
       WaveConfig(
-        color: Colors.cyanAccent.withOpacity(0.4),
+        color: Colors.cyanAccent.withValues(alpha: 0.4),
         amplitude: 30.0,
         frequency: 1.5,
         phaseShift: progress * 2 * math.pi,
         verticalOffset: size.height * 0.5,
       ),
       WaveConfig(
-        color: Colors.purpleAccent.withOpacity(0.4),
+        color: Colors.purpleAccent.withValues(alpha: 0.4),
         amplitude: 45.0,
         frequency: 1.0,
         phaseShift: (progress * 2 * math.pi) + (math.pi / 3),
         verticalOffset: size.height * 0.55,
       ),
       WaveConfig(
-        color: Colors.blueAccent.withOpacity(0.3),
+        color: Colors.blueAccent.withValues(alpha: 0.3),
         amplitude: 25.0,
         frequency: 2.0,
         phaseShift: (progress * 2 * math.pi) - (math.pi / 2),
         verticalOffset: size.height * 0.45,
       ),
       WaveConfig(
-        color: Colors.pinkAccent.withOpacity(0.25),
+        color: Colors.pinkAccent.withValues(alpha: 0.25),
         amplitude: 50.0,
         frequency: 0.8,
         phaseShift: (progress * 2 * math.pi) + math.pi,
