@@ -40,7 +40,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(useMaterial3: true),
+      theme: ThemeData.light(useMaterial3: true),
+      darkTheme: ThemeData.dark(useMaterial3: true),
+      themeMode: ThemeMode.system,
       home: const LensImagePage(),
     );
   }
@@ -75,15 +77,27 @@ class _LensImagePageState extends State<LensImagePage> {
       designSize: const Size(960, 360),
       minTextAdapt: true,
       builder: (context, child) {
+        // The bar capsule already follows the theme brightness; keep its
+        // icons/labels monochrome and readable on both the light and dark
+        // capsule instead of the default system blue.
+        final Color tabInk = Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : const Color(0xFF14161A);
         return LiquidGlassScaffold(
           bottomNavigationBar: LiquidGlassTabBar(
             itemStyle: LiquidGlassTabItemStyle(
-              iconSize: 25.w,
+              iconSize: 22.w,
               axis: Axis.horizontal,
-              labelFontSize: 14.sp,
+              labelFontSize: 13.sp,
+              selectedColor: tabInk,
+              unselectedColor: tabInk.withValues(alpha: 0.62),
+            ),
+            pillStyle: const LiquidGlassTabPillStyle(
+              mode: LiquidGlassPillMode.none,
             ),
             height: 40.h,
-            width: 900.w,
+            width: 840.w,
+            margin: EdgeInsets.only(bottom: 12.h),
             items: items,
             selectedIndex: index,
             onChanged: (i) => setState(() => index = i),

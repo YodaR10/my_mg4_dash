@@ -1,17 +1,48 @@
 # liquid_glass_demo
 
-A new Flutter project.
+Flutter **Android Automotive (AAOS)** infotainment demo built on
+[`liquid_glass_easy`](https://pub.dev/packages/liquid_glass_easy) — an
+iOS 26-style *Liquid Glass* interface for the car.
 
-## Getting Started
+## Target
 
-This project is a starting point for a Flutter application.
+**Android Automotive only.** The APK declares
+`android.hardware.type.automotive` as a required feature, so it is
+installable on AAOS devices only — not on handheld phones, not on iOS, not
+on the web, not on desktop.
 
-A few resources to get you started if this is your first Flutter project:
+The `ios/`, `web/`, `linux/`, `macos/` and `windows/` folders are not part of
+this project.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Run it
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+
+# Start the AAOS emulator (Android Studio → Device Manager → "Car on arm64").
+flutter emulators
+flutter run -d emulator-5554
+```
+
+## Build it
+
+```bash
+flutter build apk --debug
+flutter build apk --release
+flutter build appbundle --release
+```
+
+## Checks
+
+```bash
+flutter analyze
+flutter test
+```
+
+## Docs
+
+- [`AGENTS.md`](AGENTS.md) — project working reference (glass API, automotive
+  HMI rules, performance checklist).
+- [`docs/hmi_guidelines.md`](docs/hmi_guidelines.md) — automotive HMI
+  guidelines: cognitive load, hit targets, day/night adaptivity, multimodal
+  access, context-driven layout.

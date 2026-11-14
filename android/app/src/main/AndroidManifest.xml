@@ -1,6 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android Automotive (AAOS) only.
+         `required="true"` makes the APK installable exclusively on AAOS
+         devices: it is rejected on handheld phones and tablets. -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="true" />
+    <!-- AAOS emulators can also expose a TV/leanback profile; allowed but
+         not required, so the build stays installable on the automotive image. -->
+    <uses-feature
+        android:name="android.hardware.type.leanback"
+        android:required="false" />
+
     <application
-        android:label="liquid_glass_demo"
+        android:label="Liquid Glass Auto"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -12,6 +24,11 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            <!-- AAOS marker: the app is "distraction optimized" and may be
+                 used in the non-driving categories while the vehicle moves. -->
+            <meta-data
+              android:name="distractionOptimized"
+              android:value="true" />
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues

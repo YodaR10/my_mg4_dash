@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// Small label shared by the homepage cards.
+import 'home_theme.dart';
+
+/// Section label shared by the homepage cards.
+///
+/// Kept at 14 `.sp` / medium weight so it stays readable at a glance; no
+/// hardcoded color, so it follows the tile's adaptive content color.
 class HomeModuleHeader extends StatelessWidget {
   const HomeModuleHeader({
     super.key,
@@ -16,25 +21,31 @@ class HomeModuleHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 14.w, color: Colors.white.withValues(alpha: 0.7)),
-        SizedBox(width: 5.w),
-        Expanded(
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.72),
-              fontSize: 10.5.sp,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.4,
+    final HomeInk ink = HomeInk.of(context);
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: 16.h),
+      child: Row(
+        children: [
+          Icon(icon, size: 16.w, color: ink.secondary),
+          SizedBox(width: 6.w),
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: ink.secondary,
+                fontSize: 14.sp,
+                height: 1.1,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2,
+              ),
             ),
           ),
-        ),
-        ?trailing,
-      ],
+          ?trailing,
+        ],
+      ),
     );
   }
 }

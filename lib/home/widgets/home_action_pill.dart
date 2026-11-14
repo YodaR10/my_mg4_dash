@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'home_theme.dart';
+
 /// Mock action chip used inside the homepage cards.
 ///
 /// These are plain translucent fills, not `LiquidGlassLens`es: the card is the
-/// only glass surface, so controls never stack glass on glass.
+/// only glass surface, so controls never stack glass on glass. The visual
+/// height is pinned to the 48 dp minimum target; selection is conveyed by
+/// luminance and border strength, never by color.
 class HomeActionPill extends StatelessWidget {
   const HomeActionPill({
     super.key,
@@ -25,34 +29,36 @@ class HomeActionPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color foreground = active ? const Color(0xFF101418) : Colors.white;
+    final HomeInk ink = HomeInk.of(context);
+    final Color foreground = active ? ink.onSelected : ink.primary;
     final Widget text = Text(
       label,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: foreground,
-        fontSize: 10.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w600,
       ),
     );
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 6.h),
+      constraints: const BoxConstraints(minHeight: HomeTokens.minTarget),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: active ? Colors.white : Colors.white.withValues(alpha: 0.09),
+        color: active ? ink.selected : ink.surface,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: Colors.white.withValues(alpha: active ? 0 : 0.16),
+          color: active ? Colors.transparent : ink.outline,
         ),
       ),
       child: Row(
         mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
         children: [
-          Icon(icon, size: 14.w, color: foreground),
-          SizedBox(width: 5.w),
+          Icon(icon, size: 18.w, color: foreground),
+          SizedBox(width: 8.w),
           if (expanded) Expanded(child: text) else Flexible(child: text),
-          if (trailing != null) ...[SizedBox(width: 4.w), trailing!],
+          if (trailing != null) ...[SizedBox(width: 6.w), trailing!],
         ],
       ),
     );

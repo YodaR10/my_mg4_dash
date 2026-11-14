@@ -4,6 +4,29 @@ Flutter demo app for iOS 26-style **Liquid Glass**, built on the
 [`liquid_glass_easy`](https://pub.dev/packages/liquid_glass_easy) package.
 This file is the project's working reference: read it before touching glass UI.
 
+## Target platform — Android Automotive ONLY
+
+This is an **Android Automotive (AAOS) infotainment app**. It is built,
+run, tested and shipped for AAOS **only**.
+
+| Target | Status |
+|---|---|
+| Android Automotive (AAOS) | ✅ the one and only target |
+| Android handheld / phone | ❌ not a target |
+| iOS / iPhone | ❌ not a target |
+| Web | ❌ not a target |
+| macOS / Linux / Windows desktop | ❌ not a target |
+
+Consequences, already applied to the repo:
+
+- The `ios/`, `web/`, `linux/`, `macos/`, `windows/` folders **do not exist**.
+  Do not recreate them, do not run `flutter create .` without `--platforms=android`.
+- `android/app/src/main/AndroidManifest.xml` declares
+  `<uses-feature android:name="android.hardware.type.automotive" android:required="true" />`
+  plus the AAOS `distractionOptimized` meta-data. Keep them.
+- Never add a web/desktop target back "just to preview". The AAOS emulator is
+  the preview: it runs the same Impeller/Skia pipeline as the car.
+
 ## Stack
 
 - Flutter / Dart SDK `^3.13.7`
@@ -42,6 +65,35 @@ This file is the project's working reference: read it before touching glass UI.
 11. **Test both brightnesses.** Verify text/icon contrast over light and dark
     backdrops; widen the hysteresis band if the verdict strobes.
 12. **Run `flutter analyze` after edits.**
+13. **Driver-first HMI.** Critical info (navigation, range/speed, alerts)
+    dominates; no essential function deeper than **two taps**; every
+    interactive target is at least **48×48 dp** (`48.w` × `48.h`) with ≥ 8 dp
+    between targets.
+14. **Adaptive day/night.** Support light and dark appearance through
+    `adaptivity` palettes — never hardcoded content colors. Aim WCAG AA minimum
+    (4.5:1), AAA (7:1) where possible.
+15. **Legible typography.** Sans-serif, no thin weights over glass, body text
+    ≥ 14 `.sp`, primary values ≥ 24 `.sp`; never signal state by color alone.
+16. **Multimodal + context-aware.** Critical functions keep a voice and/or
+    physical-control path; the home layout follows the driving state (driving,
+    maneuvering, parked/charging). See `docs/hmi_guidelines.md`.
+
+## Automotive HMI principles
+
+Full version with thresholds and the review checklist:
+[`docs/hmi_guidelines.md`](docs/hmi_guidelines.md). Summary:
+
+1. **Less is more.** Critical info dominates; one idea per tile; generous
+   negative space; no decorative clutter under text.
+2. **Driver-centric touch.** ≥ 48×48 dp targets, 8 dp gaps, frequent controls
+   in the driver-near half, two-tap rule, no precision-only gestures.
+3. **Consistency & adaptive UI.** Day/night via adaptivity palettes, WCAG
+   contrast, restrained motion, immediate visible feedback plus optional
+   haptic/sound.
+4. **Multimodal.** Touch + voice + simple gestures + physical shortcuts for
+   safety or rapid functions; voice entry always visible.
+5. **Context-aware layout.** Highway → navigation/range; maneuvering →
+   cameras/proximity; parked/charging → media, streaming, profiles.
 
 ## Core API
 
@@ -260,16 +312,22 @@ chrome/cards/controls, keep text contrast, test light/dark, avoid nested glass.
 
 ## Current project structure
 
-- `lib/main.dart` — `ScreenUtilInit` → `LiquidGlassScaffold`, glass tab bar,
-  body switched by tab index (FAB is no longer global).
-- `lib/home/home_view.dart` — homepage shell: `LiquidGlassView` over
-  `AnimatedBackground` with the dashboard grid.
+- `lib/main.dart` — `ScreenUtilInit` → `LiquidGlassScaffold`, glass tab bar
+  (48 dp high, monochrome items, `ThemeMode.system`), body switched by tab
+  index (FAB is no longer global).
+- `lib/home/home_view.dart` — homepage shell: `LiquidGlassView` over the
+  monochrome `AnimatedBackground`, with `adaptiveSampling` enabled so tile
+  content follows the backdrop verdict.
 - `lib/home/home_dashboard.dart` — 4-column × 2-row layout. Every slot is a
   widget parameter with a default module, so cards can be swapped without
-  touching geometry.
+  touching geometry. 16 dp side padding, 10 dp gaps, 60 dp bottom clearance
+  for the tab bar.
 - `lib/home/modules/` — one file per mock card (`navigation`, `android_auto`,
   `radio`, `climate`, `ambient`, `apps`); all static, no real actions.
-- `lib/home/widgets/` — shared `HomeGlassTile` surface, module header and
+  **Monochrome by design:** no accent hues; state comes from fill/border
+  strength. Every control is at least 48 dp.
+- `lib/home/widgets/` — shared `HomeGlassTile` surface, `home_theme.dart`
+  (`HomeTokens` + `HomeInk` monochrome/adaptive scale), module header and
   translucent action pill (no nested glass inside a tile).
 - `lib/demo_view.dart` — draggable lens playground over `AnimatedBackground`,
   fused by `LiquidGlassBlender(smoothness: 58)`; owns the morphing FAB.
@@ -279,14 +337,21 @@ chrome/cards/controls, keep text contrast, test light/dark, avoid nested glass.
   fill and icon.
 - `lib/animated_background.dart` — `CustomPainter` neon waves driven by a
   repeating `AnimationController`; loop-safe phases (all `progress` terms
-  complete a full `2π` cycle). Use as `LiquidGlassView.backgroundWidget`.
+  complete a full `2π` cycle). `monochrome: true` switches to neutral waves
+  that follow platform brightness (used by the homepage). Use as
+  `LiquidGlassView.backgroundWidget`.
+- `docs/hmi_guidelines.md` — automotive HMI rules: cognitive load, hit
+  targets, two-tap rule, day/night adaptivity, multimodal access,
+  context-driven layout, PR checklist.
 
-### Known cleanup
+### Homepage design contract
 
-`AnimatedBackground.build` currently returns a Material `Scaffold`. As a
-`LiquidGlassView.backgroundWidget` it should be a plain widget (e.g.
-`AnimatedBuilder` → `CustomPaint` with `SizedBox.expand()`); the page-level
-scaffold belongs to `LiquidGlassScaffold`.
+- Tiles get their adaptive palette from `HomeTokens.adaptivity`; content
+  tones come from `HomeInk.of(context)`, never from hardcoded white/black.
+- A module builds **above** `HomeGlassTile`, so it cannot call `HomeInk.of`
+  itself — put the call inside a `Builder` passed as the tile's child.
+- Primary values ≥ 24 `.sp`, labels 14–16 `.sp`, captions ≥ 12 `.sp`; no thin
+  weights. Selected state = luminance (fill/border), not hue.
 
 ## Performance checklist
 
@@ -303,12 +368,25 @@ scaffold belongs to `LiquidGlassScaffold`.
 
 ## Commands
 
+The only build/run target is the AAOS emulator.
+
 ```bash
 flutter pub get
 flutter analyze
 flutter test
-flutter run -d macos   # or chrome / ios simulator
+
+# Run on the Android Automotive emulator (AAOS image).
+flutter emulators                                  # list AVDs
+flutter run -d emulator-5554                       # the "Car on arm64" AVD
+
+# Build artifacts (Android only).
+flutter build apk --debug
+flutter build apk --release
+flutter build appbundle --release
 ```
+
+There is no `flutter build web`, `flutter build ios`, `flutter build macos`:
+those platform folders are not part of this project.
 
 ## References
 

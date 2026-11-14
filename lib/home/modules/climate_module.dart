@@ -3,17 +3,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
+import '../widgets/home_theme.dart';
 
-/// Column 3: temperature and fan on top, modes and seat heating below.
+/// Column 3: climate, spanning both rows.
+///
+/// Temperature and fan values sit in the top half; the two button rows fill
+/// the bottom half. State is shown with fill/border strength (luminance), so
+/// the same widget reads correctly on dark and light glass.
 class ClimateModule extends StatelessWidget {
   const ClimateModule({super.key});
-
-  static const Color _amber = Color(0xFFFFC857);
 
   @override
   Widget build(BuildContext context) {
     return HomeGlassTile(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -21,74 +24,80 @@ class ClimateModule extends StatelessWidget {
             icon: Icons.thermostat_rounded,
             label: 'Clima',
           ),
-          SizedBox(height: 7.h),
-          const Expanded(
-            flex: 38,
-            child: Row(
-              children: [
-                Expanded(child: _Temperature()),
-                _Divider(),
-                Expanded(child: _FanLevel()),
-              ],
-            ),
-          ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 6.h),
           Expanded(
-            flex: 62,
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ClimateToggle(
-                        icon: Icons.auto_mode_rounded,
-                        label: 'Auto',
-                        active: true,
-                      ),
-                    ),
-                    SizedBox(width: 5.w),
-                    const Expanded(
-                      child: _ClimateToggle(
-                        icon: Icons.ac_unit_rounded,
-                        label: 'A/C',
-                        active: true,
-                      ),
-                    ),
-                    SizedBox(width: 5.w),
-                    const Expanded(
-                      child: _ClimateToggle(
-                        icon: Icons.loop_rounded,
-                        label: 'Ricircolo',
-                        active: false,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 7.h),
-                Expanded(
+                const Expanded(
                   child: Row(
                     children: [
-                      const Expanded(
-                        child: _SeatControl(
-                          icon: Icons.event_seat_rounded,
-                          label: 'SX',
-                          level: 2,
+                      Expanded(flex: 5, child: _TemperatureValue()),
+                      _Divider(),
+                      Expanded(flex: 3, child: _FanLevel()),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: _ToggleChip(
+                                icon: Icons.auto_mode_rounded,
+                                label: 'Auto',
+                                active: true,
+                              ),
+                            ),
+                            SizedBox(width: HomeTokens.gap.w),
+                            const Expanded(
+                              child: _ToggleChip(
+                                icon: Icons.ac_unit_rounded,
+                                label: 'A/C',
+                                active: true,
+                              ),
+                            ),
+                            SizedBox(width: HomeTokens.gap.w),
+                            const Expanded(
+                              child: _ToggleChip(
+                                icon: Icons.loop_rounded,
+                                label: 'Ricircolo',
+                                active: false,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 5.w),
-                      const Expanded(
-                        child: _SeatControl(
-                          icon: Icons.drive_eta_rounded,
-                          label: 'Volante',
-                          level: 1,
-                        ),
-                      ),
-                      SizedBox(width: 5.w),
-                      const Expanded(
-                        child: _SeatControl(
-                          icon: Icons.event_seat_rounded,
-                          label: 'DX',
-                          level: 0,
+                      SizedBox(height: HomeTokens.gap.h),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: _SeatControl(
+                                icon: Icons.event_seat_rounded,
+                                label: 'SX',
+                                level: 2,
+                              ),
+                            ),
+                            SizedBox(width: HomeTokens.gap.w),
+                            const Expanded(
+                              child: _SeatControl(
+                                icon: Icons.drive_eta_rounded,
+                                label: 'Volante',
+                                level: 1,
+                              ),
+                            ),
+                            SizedBox(width: HomeTokens.gap.w),
+                            const Expanded(
+                              child: _SeatControl(
+                                icon: Icons.event_seat_rounded,
+                                label: 'DX',
+                                level: 0,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -103,74 +112,40 @@ class ClimateModule extends StatelessWidget {
   }
 }
 
-class _Temperature extends StatelessWidget {
-  const _Temperature();
+class _TemperatureValue extends StatelessWidget {
+  const _TemperatureValue();
 
   @override
   Widget build(BuildContext context) {
+    final HomeInk ink = HomeInk.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '21.5°',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.sp,
-                    fontWeight: FontWeight.w300,
-                    height: 1,
-                  ),
-                ),
-              ),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            '21.5°',
+            maxLines: 1,
+            style: TextStyle(
+              color: ink.primary,
+              fontSize: 32.sp,
+              height: 1,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.5,
             ),
-            SizedBox(width: 5.w),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _StepButton(icon: Icons.add_rounded),
-                SizedBox(height: 4.h),
-                _StepButton(icon: Icons.remove_rounded),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: 3.h),
-        Text(
-          'Int. 22° · Est. 18°',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.6),
-            fontSize: 8.5.sp,
           ),
         ),
+        SizedBox(height: 4.h),
+        Text(
+          'Est. 18°',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: ink.secondary, fontSize: 13.sp),
+        ),
       ],
-    );
-  }
-}
-
-class _StepButton extends StatelessWidget {
-  const _StepButton({required this.icon});
-
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 19.w,
-      height: 19.w,
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-      ),
-      child: Icon(icon, size: 13.w, color: Colors.white.withValues(alpha: 0.8)),
     );
   }
 }
@@ -182,8 +157,8 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 1,
-      margin: EdgeInsets.symmetric(horizontal: 9.w),
-      color: Colors.white.withValues(alpha: 0.12),
+      margin: EdgeInsets.symmetric(horizontal: 8.w),
+      color: HomeInk.of(context).alpha(0.16),
     );
   }
 }
@@ -193,61 +168,50 @@ class _FanLevel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeInk ink = HomeInk.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Icon(
-              Icons.air_rounded,
-              size: 17.w,
-              color: Colors.white.withValues(alpha: 0.8),
-            ),
-            SizedBox(width: 5.w),
-            Text(
-              'Ventola',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.75),
-                fontSize: 9.5.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+        Text(
+          'Ventola',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: ink.secondary,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        SizedBox(height: 5.h),
+        SizedBox(height: 6.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             for (var i = 0; i < 3; i++)
               Container(
-                width: 7.w,
-                height: (9 + i * 5).h,
-                margin: EdgeInsets.only(right: 3.w),
+                width: 6.w,
+                height: (8 + i * 5).h,
+                margin: EdgeInsets.only(right: 4.w),
                 decoration: BoxDecoration(
-                  color: i < 2
-                      ? const Color(0xFF67E8F9)
-                      : Colors.white.withValues(alpha: 0.16),
+                  color: i < 2 ? ink.alpha(0.85) : ink.alpha(0.16),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
           ],
         ),
-        SizedBox(height: 3.h),
+        SizedBox(height: 4.h),
         Text(
           'Livello 2',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.55),
-            fontSize: 8.5.sp,
-          ),
+          style: TextStyle(color: ink.tertiary, fontSize: 12.sp),
         ),
       ],
     );
   }
 }
 
-class _ClimateToggle extends StatelessWidget {
-  const _ClimateToggle({
+class _ToggleChip extends StatelessWidget {
+  const _ToggleChip({
     required this.icon,
     required this.label,
     required this.active,
@@ -259,35 +223,30 @@ class _ClimateToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color foreground = active ? const Color(0xFF101418) : Colors.white;
+    final HomeInk ink = HomeInk.of(context);
+    final Color foreground = active ? ink.onSelected : ink.secondary;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: active ? Colors.white : Colors.white.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(10),
+        color: active ? ink.selected : ink.surface,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withValues(alpha: active ? 0 : 0.14),
+          color: active ? Colors.transparent : ink.outline,
         ),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 15.w,
-            color: active
-                ? const Color(0xFF101418)
-                : Colors.white.withValues(alpha: 0.7),
-          ),
-          SizedBox(height: 2.h),
+          Icon(icon, size: 18.w, color: foreground),
+          SizedBox(height: 3.h),
           Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: foreground,
-              fontSize: 8.5.sp,
+              fontSize: 12.sp,
+              height: 1,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -310,37 +269,44 @@ class _SeatControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeInk ink = HomeInk.of(context);
     final bool active = level > 0;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        color: active ? ink.surfaceActive : ink.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: active ? ink.outlineActive : ink.outline),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 16.w,
-            color: active
-                ? ClimateModule._amber
-                : Colors.white.withValues(alpha: 0.5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 15.w,
+                color: active ? ink.primary : ink.tertiary,
+              ),
+              SizedBox(width: 3.w),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: active ? ink.primary : ink.secondary,
+                    fontSize: 12.sp,
+                    height: 1,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 2.h),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.65),
-              fontSize: 7.5.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: 3.h),
+          SizedBox(height: 4.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -350,9 +316,7 @@ class _SeatControl extends StatelessWidget {
                   height: 3.h,
                   margin: EdgeInsets.symmetric(horizontal: 0.5.w),
                   decoration: BoxDecoration(
-                    color: i < level
-                        ? ClimateModule._amber
-                        : Colors.white.withValues(alpha: 0.16),
+                    color: i < level ? ink.alpha(0.8) : ink.alpha(0.16),
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
