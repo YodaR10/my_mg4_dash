@@ -30,6 +30,7 @@ class SettingsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -37,7 +38,7 @@ class SettingsContent extends StatelessWidget {
           section.label,
           style: TextStyle(
             color: Colors.white,
-            fontSize: SettingsTypography.sectionTitle,
+            fontSize: typo.sectionTitle,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -46,7 +47,7 @@ class SettingsContent extends StatelessWidget {
           _subtitleFor(section),
           style: TextStyle(
             color: Colors.white.withValues(alpha: 0.72),
-            fontSize: SettingsTypography.sectionSubtitle,
+            fontSize: typo.sectionSubtitle,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -151,7 +152,9 @@ class _AppearanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _OptionTile(
           icon: Icons.brightness_auto_outlined,
@@ -203,6 +206,110 @@ class _AppearanceSection extends StatelessWidget {
               description:
                   'L’app utilizza sempre il tema scuro, indipendentemente dal sistema.',
               icon: Icons.dark_mode_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 16.h),
+        Text(
+          'Dimensione caratteri',
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.72),
+            fontSize: typo.detailLabel,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        _OptionTile(
+          icon: Icons.format_size_outlined,
+          title: 'Grande',
+          subtitle: 'Dimensione predefinita',
+          selected: settings.fontSize == AppFontSize.large,
+          onTap: () {
+            onUpdateSettings(settings.copyWith(fontSize: AppFontSize.large));
+            onShowDetail(
+              title: 'Caratteri: Grande',
+              description:
+                  'Usa la dimensione dei caratteri predefinita per i pannelli diversi da Home.',
+              icon: Icons.format_size_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 10.h),
+        _OptionTile(
+          icon: Icons.format_size_outlined,
+          title: 'Medio',
+          subtitle: 'Caratteri leggermente più piccoli',
+          selected: settings.fontSize == AppFontSize.medium,
+          onTap: () {
+            onUpdateSettings(settings.copyWith(fontSize: AppFontSize.medium));
+            onShowDetail(
+              title: 'Caratteri: Medio',
+              description:
+                  'Riduce leggermente i caratteri nei pannelli diversi da Home per mostrare più informazioni.',
+              icon: Icons.format_size_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 10.h),
+        _OptionTile(
+          icon: Icons.format_size_outlined,
+          title: 'Piccolo',
+          subtitle: 'Caratteri più compatti',
+          selected: settings.fontSize == AppFontSize.small,
+          onTap: () {
+            onUpdateSettings(settings.copyWith(fontSize: AppFontSize.small));
+            onShowDetail(
+              title: 'Caratteri: Piccolo',
+              description:
+                  'Riduce ulteriormente i caratteri nei pannelli diversi da Home per massimizzare le informazioni a schermo.',
+              icon: Icons.format_size_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 16.h),
+        Text(
+          'Pannelli',
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.72),
+            fontSize: typo.detailLabel,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        _SliderTile(
+          icon: Icons.blur_on_outlined,
+          title: 'Sfocatura',
+          value: settings.panelBlur,
+          min: 0,
+          max: 8,
+          divisions: 16,
+          valueLabel: settings.panelBlur.toStringAsFixed(1),
+          onChanged: (v) {
+            onUpdateSettings(settings.copyWith(panelBlur: v));
+            onShowDetail(
+              title: 'Sfocatura pannelli',
+              description:
+                  'Regola la sfocatura del vetro dei pannelli. In tema scuro e chiaro la tinta segue l’aspetto selezionato (come la barra inferiore).',
+              icon: Icons.blur_on_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 10.h),
+        _SliderTile(
+          icon: Icons.opacity_outlined,
+          title: 'Trasparenza tinta',
+          value: settings.panelTintAlpha,
+          min: 0.0,
+          max: 0.25,
+          divisions: 25,
+          valueLabel: '${(settings.panelTintAlpha * 100).round()}%',
+          onChanged: (v) {
+            onUpdateSettings(settings.copyWith(panelTintAlpha: v));
+            onShowDetail(
+              title: 'Trasparenza pannelli',
+              description:
+                  'Regola l’intensità della tinta dei pannelli. Valori più bassi rendono il vetro più trasparente.',
+              icon: Icons.opacity_outlined,
             );
           },
         ),
@@ -288,8 +395,7 @@ class _SystemSection extends StatelessWidget {
           icon: Icons.system_update_alt_outlined,
           title: 'Verifica aggiornamenti',
           subtitle: 'Controlla se è disponibile una nuova versione',
-          trailing: Icon(Icons.chevron_right,
-              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
+          trailing: _ChevronIcon(),
           onTap: () {
             onShowDetail(
               title: 'Verifica aggiornamenti',
@@ -305,8 +411,7 @@ class _SystemSection extends StatelessWidget {
           icon: Icons.info_outline,
           title: 'Versione software',
           subtitle: 'Informazioni sulla versione corrente',
-          trailing: Icon(Icons.chevron_right,
-              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
+          trailing: _ChevronIcon(),
           onTap: () {
             onShowDetail(
               title: 'Versione software',
@@ -321,8 +426,7 @@ class _SystemSection extends StatelessWidget {
           icon: Icons.description_outlined,
           title: 'Note di rilascio',
           subtitle: 'Novità e modifiche recenti',
-          trailing: Icon(Icons.chevron_right,
-              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
+          trailing: _ChevronIcon(),
           onTap: () {
             onShowDetail(
               title: 'Note di rilascio',
@@ -365,8 +469,7 @@ class _MockListSection extends StatelessWidget {
             icon: items[i].icon,
             title: items[i].title,
             subtitle: items[i].description,
-            trailing: Icon(Icons.chevron_right,
-                color: Colors.white.withValues(alpha: 0.55), size: 22.w),
+            trailing: _ChevronIcon(),
             onTap: () {
               onShowDetail(
                 title: items[i].title,
@@ -400,6 +503,7 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     final Color fg = selected ? const Color(0xFF101418) : Colors.white;
     final Color sub = selected
         ? const Color(0xFF101418).withValues(alpha: 0.75)
@@ -409,7 +513,7 @@ class _OptionTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: 22.w, color: fg),
+          Icon(icon, size: typo.tileIcon, color: fg),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -418,13 +522,13 @@ class _OptionTile extends StatelessWidget {
                 Text(title,
                     style: TextStyle(
                         color: fg,
-                        fontSize: SettingsTypography.tileTitle,
+                        fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     style: TextStyle(
                         color: sub,
-                        fontSize: SettingsTypography.tileSubtitle,
+                        fontSize: typo.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
             ),
@@ -432,7 +536,7 @@ class _OptionTile extends StatelessWidget {
           Icon(
             selected ? Icons.radio_button_checked : Icons.radio_button_off,
             color: fg,
-            size: 22.w,
+            size: typo.radioIcon,
           ),
         ],
       ),
@@ -457,12 +561,13 @@ class _ToggleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return _BaseTile(
       selected: value,
       onTap: () => onChanged(!value),
       child: Row(
         children: [
-          Icon(icon, size: 22.w, color: Colors.white),
+          Icon(icon, size: typo.tileIcon, color: Colors.white),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -471,13 +576,13 @@ class _ToggleTile extends StatelessWidget {
                 Text(title,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: SettingsTypography.tileTitle,
+                        fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.72),
-                        fontSize: SettingsTypography.tileSubtitle,
+                        fontSize: typo.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
             ),
@@ -507,12 +612,13 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return _BaseTile(
       selected: false,
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: 22.w, color: Colors.white),
+          Icon(icon, size: typo.tileIcon, color: Colors.white),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -521,7 +627,7 @@ class _ActionTile extends StatelessWidget {
                 Text(title,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: SettingsTypography.tileTitle,
+                        fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
@@ -529,7 +635,7 @@ class _ActionTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.72),
-                        fontSize: SettingsTypography.tileSubtitle,
+                        fontSize: typo.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
             ),
@@ -590,13 +696,14 @@ class _SimpleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return GestureDetector(
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        width: 52.w,
-        height: 30.h,
-        padding: EdgeInsets.all(3.w),
+        width: typo.switchWidth,
+        height: typo.switchHeight,
+        padding: EdgeInsets.all(typo.switchPadding),
         decoration: BoxDecoration(
           color: value ? Colors.white : Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(999),
@@ -608,12 +715,116 @@ class _SimpleSwitch extends StatelessWidget {
           duration: const Duration(milliseconds: 180),
           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
-            width: 22.w,
-            height: 22.w,
+            width: typo.switchThumb,
+            height: typo.switchThumb,
             decoration: BoxDecoration(
               color: value ? const Color(0xFF101418) : Colors.white,
               shape: BoxShape.circle,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChevronIcon extends StatelessWidget {
+  const _ChevronIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
+    return Icon(
+      Icons.chevron_right,
+      color: Colors.white.withValues(alpha: 0.55),
+      size: typo.chevronIcon,
+    );
+  }
+}
+
+class _SliderTile extends StatelessWidget {
+  const _SliderTile({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required this.valueLabel,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final String title;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final String valueLabel;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 48.h),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, size: typo.tileIcon, color: Colors.white),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: typo.tileTitle,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    valueLabel,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.78),
+                      fontSize: typo.tileSubtitle,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  trackHeight: 3.h,
+                  thumbShape:
+                      RoundSliderThumbShape(enabledThumbRadius: 7.r),
+                  overlayShape:
+                      RoundSliderOverlayShape(overlayRadius: 14.r),
+                  activeTrackColor: Colors.white,
+                  inactiveTrackColor: Colors.white.withValues(alpha: 0.22),
+                  thumbColor: Colors.white,
+                  overlayColor: Colors.white.withValues(alpha: 0.12),
+                ),
+                child: Slider(
+                  value: value.clamp(min, max),
+                  min: min,
+                  max: max,
+                  divisions: divisions,
+                  label: valueLabel,
+                  onChanged: onChanged,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -627,6 +838,7 @@ class _InfoNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
@@ -639,14 +851,14 @@ class _InfoNote extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.info_outline,
-              size: 18.w, color: Colors.white.withValues(alpha: 0.8)),
+              size: typo.noteIcon, color: Colors.white.withValues(alpha: 0.8)),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.78),
-                fontSize: SettingsTypography.note,
+                fontSize: typo.note,
                 fontWeight: FontWeight.w500,
               ),
             ),

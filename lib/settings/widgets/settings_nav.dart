@@ -16,6 +16,7 @@ class SettingsNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -25,7 +26,7 @@ class SettingsNav extends StatelessWidget {
             'Impostazioni',
             style: TextStyle(
               color: Colors.white,
-              fontSize: SettingsTypography.navHeader,
+              fontSize: typo.navHeader,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -63,7 +64,7 @@ class SettingsNav extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            Icon(section.icon, size: 20.w, color: fg),
+                            Icon(section.icon, size: typo.navIcon, color: fg),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: Text(
@@ -72,7 +73,7 @@ class SettingsNav extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: fg,
-                                  fontSize: SettingsTypography.navItem,
+                                  fontSize: typo.navItem,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

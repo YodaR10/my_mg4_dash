@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:liquid_glass_demo/main.dart';
+import 'package:liquid_glass_demo/settings/app_settings.dart';
 
 void main() {
   testWidgets('renders the liquid glass shell and first page', (
@@ -12,7 +13,9 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(
+      const MyApp(initialSettings: AppSettings()),
+    );
     await tester.pump();
 
     // Tab bar items from `main.dart`.

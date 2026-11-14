@@ -32,22 +32,26 @@ Future<void> main() async {
   // the blender's merged-surface entry. Without this the blender below paints
   // nothing until its shader arrives — not even a lone lens's frosted fallback.
   await LiquidGlassShaders.ensureLoaded();
-  runApp(const MyApp());
+  final settings = await AppSettings.load();
+  runApp(MyApp(initialSettings: settings));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.initialSettings});
+
+  final AppSettings initialSettings;
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  AppSettings _settings = const AppSettings();
+  late AppSettings _settings;
 
   @override
   void initState() {
     super.initState();
+    _settings = widget.initialSettings;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       applySystemUi(_settings);
     });
@@ -57,6 +61,7 @@ class _MyAppState extends State<MyApp> {
     if (value == _settings) return;
     setState(() => _settings = value);
     applySystemUi(value);
+    value.save();
   }
 
   @override

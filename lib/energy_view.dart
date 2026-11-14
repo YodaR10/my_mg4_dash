@@ -4,6 +4,7 @@ import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
 import 'animated_background.dart';
 import 'control_card.dart';
+import 'settings/app_settings.dart';
 
 class EnergyView extends StatefulWidget {
   const EnergyView({super.key});
@@ -32,6 +33,7 @@ class _EnergyViewState extends State<EnergyView> {
 
   @override
   Widget build(BuildContext context) {
+    final double scale = AppSettingsScope.of(context).settings.fontSize.scale;
     return LiquidGlassView(
       backgroundWidget: const AnimatedBackground(),
       child: Stack(
@@ -69,7 +71,7 @@ class _EnergyViewState extends State<EnergyView> {
                             '40% - Charging',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 14.sp,
+                              fontSize: 12.sp * scale,
                             ),
                           ),
                         ],

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 
 import 'animated_background.dart';
+import 'settings/app_settings.dart';
 
 class DemoView extends StatefulWidget {
   final int index;
@@ -149,6 +150,7 @@ class _CardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double scale = AppSettingsScope.of(context).settings.fontSize.scale;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 22.w),
       child: Column(
@@ -159,14 +161,14 @@ class _CardContent extends StatelessWidget {
             'Liquid Glass',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 22.sp,
+              fontSize: 19.sp * scale,
               fontWeight: FontWeight.w800,
             ),
           ),
           SizedBox(height: 4),
           Text(
             'Refraction over a live photo',
-            style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+            style: TextStyle(color: Colors.white70, fontSize: 12.sp * scale),
           ),
         ],
       ),

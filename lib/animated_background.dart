@@ -29,13 +29,14 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
     // Plain background widget: `LiquidGlassScaffold` owns the page shell and
     // `LiquidGlassView` uses this as its refractable `backgroundWidget`.
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          painter: WavePainter(_controller.value),
+          painter: WavePainter(_controller.value, brightness: brightness),
           child: const SizedBox.expand(),
         );
       },
@@ -70,42 +71,52 @@ class MyBackgroundPainter extends CustomPainter {
 
 class WavePainter extends CustomPainter {
   final double progress;
+  final Brightness brightness;
 
-  WavePainter(this.progress);
+  WavePainter(this.progress, {this.brightness = Brightness.dark});
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Sfondo di base scuro per far risaltare i colori fluo/neon delle onde
+    final bool dark = brightness == Brightness.dark;
+    // Muted base and waves to avoid an overly bright background.
     final bgPaint = Paint()
-      ..color = const Color(0xFF0F172A)
+      ..color = dark ? const Color(0xFF0B1020) : const Color(0xFFB8C2CF)
       ..style = PaintingStyle.fill;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), bgPaint);
 
-    // Definiamo un set di onde con colori, ampiezze e frequenze diverse
+    final double intensity = dark ? 0.22 : 0.14;
     final waves = [
       WaveConfig(
-        color: Colors.cyanAccent.withValues(alpha: 0.4),
+        color: (dark ? Colors.cyanAccent : Colors.blueGrey).withValues(
+          alpha: intensity + 0.04,
+        ),
         amplitude: 30.0,
         frequency: 1.5,
         phaseShift: progress * 2 * math.pi,
         verticalOffset: size.height * 0.5,
       ),
       WaveConfig(
-        color: Colors.purpleAccent.withValues(alpha: 0.4),
+        color: (dark ? Colors.indigoAccent : Colors.indigo).withValues(
+          alpha: intensity + 0.02,
+        ),
         amplitude: 45.0,
         frequency: 1.0,
         phaseShift: (progress * 2 * math.pi) + (math.pi / 3),
         verticalOffset: size.height * 0.55,
       ),
       WaveConfig(
-        color: Colors.blueAccent.withValues(alpha: 0.3),
+        color: (dark ? Colors.blueAccent : Colors.blueGrey).withValues(
+          alpha: intensity,
+        ),
         amplitude: 25.0,
         frequency: 2.0,
         phaseShift: (progress * 2 * math.pi) - (math.pi / 2),
         verticalOffset: size.height * 0.45,
       ),
       WaveConfig(
-        color: Colors.pinkAccent.withValues(alpha: 0.25),
+        color: (dark ? Colors.deepPurpleAccent : Colors.blueGrey).withValues(
+          alpha: intensity - 0.02,
+        ),
         amplitude: 50.0,
         frequency: 0.8,
         phaseShift: (progress * 2 * math.pi) + math.pi,
@@ -150,7 +161,8 @@ class WavePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant WavePainter oldDelegate) {
-    return oldDelegate.progress != progress;
+    return oldDelegate.progress != progress ||
+        oldDelegate.brightness != brightness;
   }
 }
 

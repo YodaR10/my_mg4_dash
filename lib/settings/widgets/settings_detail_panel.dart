@@ -23,6 +23,7 @@ class SettingsDetailPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.of(context);
     final String resolvedTitle = title ?? _defaultTitle(section, settings);
     final String resolvedDescription =
         description ?? _defaultDescription(section, settings);
@@ -35,7 +36,7 @@ class SettingsDetailPanel extends StatelessWidget {
           'Dettagli',
           style: TextStyle(
             color: Colors.white.withValues(alpha: 0.72),
-            fontSize: SettingsTypography.detailLabel,
+            fontSize: typo.detailLabel,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -65,7 +66,7 @@ class SettingsDetailPanel extends StatelessWidget {
                     child: Center(
                       child: Icon(
                         resolvedIcon,
-                        size: 64.w,
+                        size: typo.detailHeroIcon,
                         color: Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
@@ -76,7 +77,7 @@ class SettingsDetailPanel extends StatelessWidget {
                   resolvedTitle,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: SettingsTypography.detailTitle,
+                    fontSize: typo.detailTitle,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -88,7 +89,7 @@ class SettingsDetailPanel extends StatelessWidget {
                       resolvedDescription,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.78),
-                        fontSize: SettingsTypography.detailBody,
+                        fontSize: typo.detailBody,
                         fontWeight: FontWeight.w500,
                         height: 1.35,
                       ),
@@ -125,7 +126,7 @@ class SettingsDetailPanel extends StatelessWidget {
   String _defaultDescription(SettingsSection section, AppSettings settings) =>
       switch (section) {
         SettingsSection.appearance =>
-          'Seleziona Sistema, Chiaro o Scuro per personalizzare l’aspetto dell’app.',
+          'Personalizza tema e dimensione dei caratteri.\n\nTema: ${_themeLabel(settings)}\nCaratteri: ${_fontSizeLabel(settings)} (pannelli diversi da Home)',
         SettingsSection.screen =>
           'Nascondi una o entrambe le barre di sistema per coprirle.\n\nBarra superiore: ${settings.hideTopSystemBar ? "nascosta" : "visibile"}\nBarra dei pulsanti: ${settings.hideBottomSystemBar ? "nascosta" : "visibile"}\n\nLa barra di navigazione dell’app resta sempre visibile.',
         SettingsSection.system =>
@@ -143,5 +144,11 @@ class SettingsDetailPanel extends StatelessWidget {
         AppThemePreference.system => 'Sistema',
         AppThemePreference.light => 'Chiaro',
         AppThemePreference.dark => 'Scuro',
+      };
+
+  String _fontSizeLabel(AppSettings settings) => switch (settings.fontSize) {
+        AppFontSize.large => 'Grande',
+        AppFontSize.medium => 'Medio',
+        AppFontSize.small => 'Piccolo',
       };
 }
