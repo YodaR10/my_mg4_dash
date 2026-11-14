@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../home/widgets/home_theme.dart';
+import '../settings_typography.dart';
 import '../settings_view.dart';
 
 class SettingsNav extends StatelessWidget {
@@ -16,7 +16,6 @@ class SettingsNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -25,8 +24,8 @@ class SettingsNav extends StatelessWidget {
           child: Text(
             'Impostazioni',
             style: TextStyle(
-              color: ink.primary,
-              fontSize: 20.sp,
+              color: Colors.white,
+              fontSize: SettingsTypography.navHeader,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -38,7 +37,7 @@ class SettingsNav extends StatelessWidget {
             itemBuilder: (context, i) {
               final SettingsSection section = SettingsSection.values[i];
               final bool active = section == selected;
-              final Color fg = active ? ink.onSelected : ink.primary;
+              final Color fg = active ? const Color(0xFF101418) : Colors.white;
               return Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -46,15 +45,17 @@ class SettingsNav extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14.r),
                   child: Ink(
                     decoration: BoxDecoration(
-                      color: active ? ink.selected : ink.surface,
+                      color: active
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(14.r),
                       border: Border.all(
-                        color: active ? Colors.transparent : ink.outline,
+                        color: Colors.white
+                            .withValues(alpha: active ? 0 : 0.14),
                       ),
                     ),
                     child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(minHeight: HomeTokens.minTarget),
+                      constraints: BoxConstraints(minHeight: 48.h),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10.w,
@@ -71,7 +72,7 @@ class SettingsNav extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: fg,
-                                  fontSize: 14.sp,
+                                  fontSize: SettingsTypography.navItem,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

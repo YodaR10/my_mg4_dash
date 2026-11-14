@@ -8,10 +8,6 @@ import 'home_dashboard.dart';
 ///
 /// The page owns its glass pipeline, so the modules inside [dashboard] can be
 /// swapped without their lenses double-refracting through the scaffold chrome.
-///
-/// The backdrop is monochrome and follows the platform brightness; glass tiles
-/// opt into adaptivity sampling so their content flips between the dark and
-/// light palette with the same verdict that drives the tint.
 class HomeView extends StatelessWidget {
   const HomeView({super.key, this.dashboard = const HomeDashboard()});
 
@@ -20,8 +16,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LiquidGlassView(
-      backgroundWidget: const AnimatedBackground(monochrome: true),
-      adaptiveSampling: const LiquidGlassAdaptiveSampling(),
+      backgroundWidget: const AnimatedBackground(),
       child: SafeArea(bottom: false, child: dashboard),
     );
   }

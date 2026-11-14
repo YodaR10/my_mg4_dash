@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../home/widgets/home_theme.dart';
 import '../app_settings.dart';
+import '../settings_typography.dart';
 import '../settings_view.dart';
 
 class SettingsDetailPanel extends StatelessWidget {
@@ -23,7 +23,6 @@ class SettingsDetailPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     final String resolvedTitle = title ?? _defaultTitle(section, settings);
     final String resolvedDescription =
         description ?? _defaultDescription(section, settings);
@@ -35,8 +34,8 @@ class SettingsDetailPanel extends StatelessWidget {
         Text(
           'Dettagli',
           style: TextStyle(
-            color: ink.secondary,
-            fontSize: 14.sp,
+            color: Colors.white.withValues(alpha: 0.72),
+            fontSize: SettingsTypography.detailLabel,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -44,9 +43,9 @@ class SettingsDetailPanel extends StatelessWidget {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color: ink.surface,
+              color: Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(18.r),
-              border: Border.all(color: ink.outline),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
             ),
             padding: EdgeInsets.all(14.w),
             child: Column(
@@ -57,15 +56,17 @@ class SettingsDetailPanel extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: ink.surfaceActive,
+                      color: Colors.white.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: ink.outline),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.16),
+                      ),
                     ),
                     child: Center(
                       child: Icon(
                         resolvedIcon,
                         size: 64.w,
-                        color: ink.secondary,
+                        color: Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
                   ),
@@ -74,8 +75,8 @@ class SettingsDetailPanel extends StatelessWidget {
                 Text(
                   resolvedTitle,
                   style: TextStyle(
-                    color: ink.primary,
-                    fontSize: 20.sp,
+                    color: Colors.white,
+                    fontSize: SettingsTypography.detailTitle,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -86,8 +87,8 @@ class SettingsDetailPanel extends StatelessWidget {
                     child: Text(
                       resolvedDescription,
                       style: TextStyle(
-                        color: ink.secondary,
-                        fontSize: 14.sp,
+                        color: Colors.white.withValues(alpha: 0.78),
+                        fontSize: SettingsTypography.detailBody,
                         fontWeight: FontWeight.w500,
                         height: 1.35,
                       ),

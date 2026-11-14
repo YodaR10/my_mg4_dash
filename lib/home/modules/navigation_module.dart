@@ -3,27 +3,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
-import '../widgets/home_theme.dart';
 
-/// Column 1, row 1: critical navigation destinations.
-///
-/// Two full-width destinations, each at least [HomeTokens.minTarget] tall —
-/// the fastest possible path (one tap) for the most common driving task.
+/// Column 1, row 1: quick navigation to home and office.
 class NavigationModule extends StatelessWidget {
   const NavigationModule({super.key});
 
   @override
   Widget build(BuildContext context) {
     return HomeGlassTile(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const HomeModuleHeader(
             icon: Icons.navigation_rounded,
             label: 'Navigazione',
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 7.h),
           const Expanded(
             child: _DestinationButton(
               icon: Icons.home_rounded,
@@ -58,20 +54,17 @@ class _DestinationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
-
     return Container(
-      constraints: const BoxConstraints(minHeight: HomeTokens.minTarget),
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      padding: EdgeInsets.symmetric(horizontal: 9.w),
       decoration: BoxDecoration(
-        color: ink.surface,
+        color: Colors.white.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: ink.outline),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 20.w, color: ink.primary),
-          SizedBox(width: 10.w),
+          Icon(icon, size: 19.w, color: Colors.white),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -82,10 +75,9 @@ class _DestinationButton extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: ink.primary,
-                    fontSize: 16.sp,
-                    height: 1.1,
-                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
@@ -93,15 +85,18 @@ class _DestinationButton extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: ink.secondary,
-                    fontSize: 12.sp,
-                    height: 1.2,
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 9.5.sp,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.chevron_right_rounded, size: 18.w, color: ink.tertiary),
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 16.w,
+            color: Colors.white.withValues(alpha: 0.54),
+          ),
         ],
       ),
     );

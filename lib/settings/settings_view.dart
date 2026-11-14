@@ -78,8 +78,7 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final AppSettingsScope scope = AppSettingsScope.of(context);
     return LiquidGlassView(
-      backgroundWidget: const AnimatedBackground(monochrome: true),
-      adaptiveSampling: const LiquidGlassAdaptiveSampling(),
+      backgroundWidget: const AnimatedBackground(),
       child: SafeArea(
         bottom: false,
         child: Padding(
@@ -91,11 +90,9 @@ class _SettingsViewState extends State<SettingsView> {
                 flex: 1,
                 child: HomeGlassTile(
                   padding: EdgeInsets.all(10.w),
-                  child: Builder(
-                    builder: (context) => SettingsNav(
-                      selected: _selected,
-                      onSelect: _selectSection,
-                    ),
+                  child: SettingsNav(
+                    selected: _selected,
+                    onSelect: _selectSection,
                   ),
                 ),
               ),
@@ -104,15 +101,13 @@ class _SettingsViewState extends State<SettingsView> {
                 flex: 2,
                 child: HomeGlassTile(
                   padding: EdgeInsets.all(14.w),
-                  child: Builder(
-                    builder: (context) => SettingsContent(
-                      section: _selected,
-                      settings: scope.settings,
-                      onUpdateSettings: scope.update,
-                      onNotImplemented: (feature) =>
-                          _showNotImplemented(context, feature: feature),
-                      onShowDetail: _showDetail,
-                    ),
+                  child: SettingsContent(
+                    section: _selected,
+                    settings: scope.settings,
+                    onUpdateSettings: scope.update,
+                    onNotImplemented: (feature) =>
+                        _showNotImplemented(context, feature: feature),
+                    onShowDetail: _showDetail,
                   ),
                 ),
               ),
@@ -121,14 +116,12 @@ class _SettingsViewState extends State<SettingsView> {
                 flex: 1,
                 child: HomeGlassTile(
                   padding: EdgeInsets.all(14.w),
-                  child: Builder(
-                    builder: (context) => SettingsDetailPanel(
-                      section: _selected,
-                      settings: scope.settings,
-                      title: _detailTitle,
-                      description: _detailDescription,
-                      icon: _detailIcon,
-                    ),
+                  child: SettingsDetailPanel(
+                    section: _selected,
+                    settings: scope.settings,
+                    title: _detailTitle,
+                    description: _detailDescription,
+                    icon: _detailIcon,
                   ),
                 ),
               ),

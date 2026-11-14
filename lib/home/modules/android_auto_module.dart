@@ -3,86 +3,81 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
-import '../widgets/home_theme.dart';
 
-/// Column 1, row 2: phone projection entry point.
-///
-/// One neutral card, one target. No brand colors: the action is communicated by
-/// position, icon and type weight instead of hue.
+/// Column 1, row 2: Android Auto connection entry point.
 class AndroidAutoModule extends StatelessWidget {
   const AndroidAutoModule({super.key});
+
+  static const Color _androidGreen = Color(0xFF3DDC84);
 
   @override
   Widget build(BuildContext context) {
     return HomeGlassTile(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-      child: Builder(
-        builder: (context) {
-          final HomeInk ink = HomeInk.of(context);
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const HomeModuleHeader(
-                icon: Icons.phone_android_rounded,
-                label: 'Telefono',
-              ),
-              SizedBox(height: 6.h),
-              Expanded(
-                child: Container(
-                  constraints: const BoxConstraints(
-                    minHeight: HomeTokens.minTarget,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  decoration: BoxDecoration(
-                    color: ink.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: ink.outline),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.directions_car_filled_rounded,
-                        size: 26.w,
-                        color: ink.primary,
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Android Auto',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: ink.primary,
-                                fontSize: 15.sp,
-                                height: 1.15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              'Connetti via USB',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: ink.secondary,
-                                fontSize: 13.sp,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.link_rounded, size: 18.w, color: ink.tertiary),
-                    ],
-                  ),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HomeModuleHeader(
+            icon: Icons.phone_android_rounded,
+            label: 'Telefono',
+          ),
+          SizedBox(height: 7.h),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              decoration: BoxDecoration(
+                color: _androidGreen.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: _androidGreen.withValues(alpha: 0.35),
                 ),
               ),
-            ],
-          );
-        },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.directions_car_filled_rounded,
+                    size: 26.w,
+                    color: _androidGreen,
+                  ),
+                  SizedBox(width: 9.w),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Android Auto',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Connetti via USB',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7),
+                            fontSize: 9.5.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.link_rounded,
+                    size: 18.w,
+                    color: Colors.white.withValues(alpha: 0.54),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

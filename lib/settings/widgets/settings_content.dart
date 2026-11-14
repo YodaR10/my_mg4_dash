@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../home/widgets/home_theme.dart';
 import '../app_settings.dart';
+import '../settings_typography.dart';
 import '../settings_view.dart';
 
 typedef NotImplementedCallback = void Function(String feature);
@@ -30,15 +30,14 @@ class SettingsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           section.label,
           style: TextStyle(
-            color: ink.primary,
-            fontSize: 24.sp,
+            color: Colors.white,
+            fontSize: SettingsTypography.sectionTitle,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -46,15 +45,15 @@ class SettingsContent extends StatelessWidget {
         Text(
           _subtitleFor(section),
           style: TextStyle(
-            color: ink.secondary,
-            fontSize: 14.sp,
+            color: Colors.white.withValues(alpha: 0.72),
+            fontSize: SettingsTypography.sectionSubtitle,
             fontWeight: FontWeight.w500,
           ),
         ),
         SizedBox(height: 14.h),
         Expanded(
           child: SingleChildScrollView(
-            child: _buildBody(context, ink),
+            child: _buildBody(context),
           ),
         ),
       ],
@@ -68,11 +67,10 @@ class SettingsContent extends StatelessWidget {
         SettingsSection.system => 'Aggiornamenti e informazioni di sistema.',
         SettingsSection.audio => 'Impostazioni audio di base (mock).',
         SettingsSection.connectivity => 'Connessioni e dispositivi (mock).',
-        SettingsSection.privacy =>
-          'Privacy, permessi e sicurezza (mock).',
+        SettingsSection.privacy => 'Privacy, permessi e sicurezza (mock).',
       };
 
-  Widget _buildBody(BuildContext context, HomeInk ink) {
+  Widget _buildBody(BuildContext context) {
     switch (section) {
       case SettingsSection.appearance:
         return _AppearanceSection(
@@ -231,7 +229,8 @@ class _ScreenSection extends StatelessWidget {
         _ToggleTile(
           icon: Icons.vertical_align_top_outlined,
           title: 'Nascondi la barra superiore',
-          subtitle: 'Nasconde ora/segnale per coprire la barra di sistema in alto',
+          subtitle:
+              'Nasconde ora/segnale per coprire la barra di sistema in alto',
           value: settings.hideTopSystemBar,
           onChanged: (v) {
             onUpdateSettings(settings.copyWith(hideTopSystemBar: v));
@@ -248,7 +247,8 @@ class _ScreenSection extends StatelessWidget {
         _ToggleTile(
           icon: Icons.touch_app_outlined,
           title: 'Nascondi barra dei pulsanti',
-          subtitle: 'Nasconde i pulsanti di sistema inferiori per coprire la barra',
+          subtitle:
+              'Nasconde i pulsanti di sistema inferiori per coprire la barra',
           value: settings.hideBottomSystemBar,
           onChanged: (v) {
             onUpdateSettings(settings.copyWith(hideBottomSystemBar: v));
@@ -262,7 +262,7 @@ class _ScreenSection extends StatelessWidget {
           },
         ),
         SizedBox(height: 12.h),
-        _InfoNote(
+        const _InfoNote(
           text:
               'La barra di navigazione dell’app in basso resta sempre visibile. Puoi nascondere una o entrambe le barre di sistema.',
         ),
@@ -282,18 +282,19 @@ class _SystemSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Column(
       children: [
         _ActionTile(
           icon: Icons.system_update_alt_outlined,
           title: 'Verifica aggiornamenti',
           subtitle: 'Controlla se è disponibile una nuova versione',
-          trailing: Icon(Icons.chevron_right, color: ink.tertiary, size: 22.w),
+          trailing: Icon(Icons.chevron_right,
+              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
           onTap: () {
             onShowDetail(
               title: 'Verifica aggiornamenti',
-              description: 'Ultimo controllo: —\nNessun aggiornamento verificato in questa demo.',
+              description:
+                  'Ultimo controllo: —\nNessun aggiornamento verificato in questa demo.',
               icon: Icons.system_update_alt_outlined,
             );
             onNotImplemented('Verifica aggiornamenti');
@@ -304,7 +305,8 @@ class _SystemSection extends StatelessWidget {
           icon: Icons.info_outline,
           title: 'Versione software',
           subtitle: 'Informazioni sulla versione corrente',
-          trailing: Icon(Icons.chevron_right, color: ink.tertiary, size: 22.w),
+          trailing: Icon(Icons.chevron_right,
+              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
           onTap: () {
             onShowDetail(
               title: 'Versione software',
@@ -319,11 +321,13 @@ class _SystemSection extends StatelessWidget {
           icon: Icons.description_outlined,
           title: 'Note di rilascio',
           subtitle: 'Novità e modifiche recenti',
-          trailing: Icon(Icons.chevron_right, color: ink.tertiary, size: 22.w),
+          trailing: Icon(Icons.chevron_right,
+              color: Colors.white.withValues(alpha: 0.55), size: 22.w),
           onTap: () {
             onShowDetail(
               title: 'Note di rilascio',
-              description: 'Le note di rilascio non sono disponibili in questa demo.',
+              description:
+                  'Le note di rilascio non sono disponibili in questa demo.',
               icon: Icons.description_outlined,
             );
             onNotImplemented('Note di rilascio');
@@ -354,7 +358,6 @@ class _MockListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Column(
       children: [
         for (int i = 0; i < items.length; i++) ...[
@@ -362,7 +365,8 @@ class _MockListSection extends StatelessWidget {
             icon: items[i].icon,
             title: items[i].title,
             subtitle: items[i].description,
-            trailing: Icon(Icons.chevron_right, color: ink.tertiary, size: 22.w),
+            trailing: Icon(Icons.chevron_right,
+                color: Colors.white.withValues(alpha: 0.55), size: 22.w),
             onTap: () {
               onShowDetail(
                 title: items[i].title,
@@ -396,9 +400,10 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
-    final Color fg = selected ? ink.onSelected : ink.primary;
-    final Color sub = selected ? ink.onSelected.withValues(alpha: 0.8) : ink.secondary;
+    final Color fg = selected ? const Color(0xFF101418) : Colors.white;
+    final Color sub = selected
+        ? const Color(0xFF101418).withValues(alpha: 0.75)
+        : Colors.white.withValues(alpha: 0.72);
     return _BaseTile(
       selected: selected,
       onTap: onTap,
@@ -412,11 +417,15 @@ class _OptionTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: TextStyle(
-                        color: fg, fontSize: 16.sp, fontWeight: FontWeight.w700)),
+                        color: fg,
+                        fontSize: SettingsTypography.tileTitle,
+                        fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     style: TextStyle(
-                        color: sub, fontSize: 13.sp, fontWeight: FontWeight.w500)),
+                        color: sub,
+                        fontSize: SettingsTypography.tileSubtitle,
+                        fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -448,13 +457,12 @@ class _ToggleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return _BaseTile(
       selected: value,
       onTap: () => onChanged(!value),
       child: Row(
         children: [
-          Icon(icon, size: 22.w, color: ink.primary),
+          Icon(icon, size: 22.w, color: Colors.white),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -462,14 +470,14 @@ class _ToggleTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: TextStyle(
-                        color: ink.primary,
-                        fontSize: 16.sp,
+                        color: Colors.white,
+                        fontSize: SettingsTypography.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     style: TextStyle(
-                        color: ink.secondary,
-                        fontSize: 13.sp,
+                        color: Colors.white.withValues(alpha: 0.72),
+                        fontSize: SettingsTypography.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
             ),
@@ -499,13 +507,12 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return _BaseTile(
       selected: false,
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: 22.w, color: ink.primary),
+          Icon(icon, size: 22.w, color: Colors.white),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -513,16 +520,16 @@ class _ActionTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: TextStyle(
-                        color: ink.primary,
-                        fontSize: 16.sp,
+                        color: Colors.white,
+                        fontSize: SettingsTypography.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: ink.secondary,
-                        fontSize: 13.sp,
+                        color: Colors.white.withValues(alpha: 0.72),
+                        fontSize: SettingsTypography.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
             ),
@@ -547,7 +554,6 @@ class _BaseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -555,14 +561,17 @@ class _BaseTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         child: Ink(
           decoration: BoxDecoration(
-            color: selected ? ink.surfaceActive : ink.surface,
+            color: selected
+                ? Colors.white.withValues(alpha: 0.20)
+                : Colors.white.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: selected ? ink.outlineActive : ink.outline,
+              color: Colors.white
+                  .withValues(alpha: selected ? 0.34 : 0.14),
             ),
           ),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: HomeTokens.minTarget),
+            constraints: BoxConstraints(minHeight: 48.h),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
               child: child,
@@ -581,7 +590,6 @@ class _SimpleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return GestureDetector(
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
@@ -590,9 +598,11 @@ class _SimpleSwitch extends StatelessWidget {
         height: 30.h,
         padding: EdgeInsets.all(3.w),
         decoration: BoxDecoration(
-          color: value ? ink.selected : ink.surface,
+          color: value ? Colors.white : Colors.white.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: value ? Colors.transparent : ink.outline),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: value ? 0 : 0.20),
+          ),
         ),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 180),
@@ -601,7 +611,7 @@ class _SimpleSwitch extends StatelessWidget {
             width: 22.w,
             height: 22.w,
             decoration: BoxDecoration(
-              color: value ? ink.onSelected : ink.primary,
+              color: value ? const Color(0xFF101418) : Colors.white,
               shape: BoxShape.circle,
             ),
           ),
@@ -617,26 +627,26 @@ class _InfoNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeInk ink = HomeInk.of(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: ink.surface,
+        color: Colors.white.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: ink.outline),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, size: 18.w, color: ink.secondary),
+          Icon(Icons.info_outline,
+              size: 18.w, color: Colors.white.withValues(alpha: 0.8)),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
-                color: ink.secondary,
-                fontSize: 13.sp,
+                color: Colors.white.withValues(alpha: 0.78),
+                fontSize: SettingsTypography.note,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -41,7 +41,7 @@ class HomeDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 60.h),
+      padding: EdgeInsets.fromLTRB(12.w, 10.h, 12.w, 56.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

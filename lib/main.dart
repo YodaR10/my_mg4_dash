@@ -104,27 +104,15 @@ class _LensImagePageState extends State<LensImagePage> {
       designSize: const Size(960, 360),
       minTextAdapt: true,
       builder: (context, child) {
-        // The bar capsule already follows the theme brightness; keep its
-        // icons/labels monochrome and readable on both the light and dark
-        // capsule instead of the default system blue.
-        final Color tabInk = Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : const Color(0xFF14161A);
         return LiquidGlassScaffold(
           bottomNavigationBar: LiquidGlassTabBar(
             itemStyle: LiquidGlassTabItemStyle(
-              iconSize: 22.w,
+              iconSize: 25.w,
               axis: Axis.horizontal,
-              labelFontSize: 13.sp,
-              selectedColor: tabInk,
-              unselectedColor: tabInk.withValues(alpha: 0.62),
-            ),
-            pillStyle: const LiquidGlassTabPillStyle(
-              mode: LiquidGlassPillMode.none,
+              labelFontSize: 14.sp,
             ),
             height: 40.h,
-            width: 840.w,
-            margin: EdgeInsets.only(bottom: 12.h),
+            width: 900.w,
             items: items,
             selectedIndex: index,
             onChanged: (i) => setState(() => index = i),
