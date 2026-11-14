@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../settings_typography.dart';
 import '../settings_view.dart';
 
@@ -17,6 +18,7 @@ class SettingsNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -25,7 +27,7 @@ class SettingsNav extends StatelessWidget {
           child: Text(
             'Impostazioni',
             style: TextStyle(
-              color: Colors.white,
+              color: ink.primary,
               fontSize: typo.navHeader,
               fontWeight: FontWeight.w700,
             ),
@@ -38,7 +40,7 @@ class SettingsNav extends StatelessWidget {
             itemBuilder: (context, i) {
               final SettingsSection section = SettingsSection.values[i];
               final bool active = section == selected;
-              final Color fg = active ? const Color(0xFF101418) : Colors.white;
+              final Color fg = active ? ink.onActive : ink.primary;
               return Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -47,12 +49,11 @@ class SettingsNav extends StatelessWidget {
                   child: Ink(
                     decoration: BoxDecoration(
                       color: active
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.08),
+                          ? ink.primary
+                          : ink.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(14.r),
                       border: Border.all(
-                        color: Colors.white
-                            .withValues(alpha: active ? 0 : 0.14),
+                        color: ink.primary.withValues(alpha: active ? 0 : 0.14),
                       ),
                     ),
                     child: ConstrainedBox(

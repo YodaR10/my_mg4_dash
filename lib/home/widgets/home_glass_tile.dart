@@ -25,7 +25,7 @@ class HomeGlassTile extends StatelessWidget {
         brightness == Brightness.dark ? Colors.black : Colors.white;
     final style = LiquidGlassStyle(
       shape: const LiquidGlassShape.continuousRoundedRectangle(cornerRadius: 22),
-      color: tintBase.withValues(alpha: settings.panelTintAlpha.clamp(0.0, 0.4)),
+      color: tintBase.withValues(alpha: settings.panelTintAlpha.clamp(0.05, 0.90)),
       saturation: 1.05,
       refractionIndex: 1.04,
       refractionWidth: 10,

@@ -70,7 +70,9 @@ class _EnergyViewState extends State<EnergyView> {
                           Text(
                             '40% - Charging',
                             style: TextStyle(
-                              color: Colors.white70,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white70
+                                  : const Color(0xB8101418),
                               fontSize: 12.sp * scale,
                             ),
                           ),

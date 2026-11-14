@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../app_settings.dart';
 import '../settings_typography.dart';
 import '../settings_view.dart';
@@ -24,6 +25,7 @@ class SettingsDetailPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     final String resolvedTitle = title ?? _defaultTitle(section, settings);
     final String resolvedDescription =
         description ?? _defaultDescription(section, settings);
@@ -35,7 +37,7 @@ class SettingsDetailPanel extends StatelessWidget {
         Text(
           'Dettagli',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.72),
+            color: ink.secondary,
             fontSize: typo.detailLabel,
             fontWeight: FontWeight.w600,
           ),
@@ -44,9 +46,9 @@ class SettingsDetailPanel extends StatelessWidget {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: ink.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(18.r),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+              border: Border.all(color: ink.primary.withValues(alpha: 0.14)),
             ),
             padding: EdgeInsets.all(14.w),
             child: Column(
@@ -57,17 +59,17 @@ class SettingsDetailPanel extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
+                      color: ink.primary.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.16),
+                        color: ink.primary.withValues(alpha: 0.16),
                       ),
                     ),
                     child: Center(
                       child: Icon(
                         resolvedIcon,
                         size: typo.detailHeroIcon,
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: ink.primary.withValues(alpha: 0.85),
                       ),
                     ),
                   ),
@@ -76,7 +78,7 @@ class SettingsDetailPanel extends StatelessWidget {
                 Text(
                   resolvedTitle,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: ink.primary,
                     fontSize: typo.detailTitle,
                     fontWeight: FontWeight.w700,
                   ),
@@ -88,7 +90,7 @@ class SettingsDetailPanel extends StatelessWidget {
                     child: Text(
                       resolvedDescription,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.78),
+                        color: ink.secondary,
                         fontSize: typo.detailBody,
                         fontWeight: FontWeight.w500,
                         height: 1.35,

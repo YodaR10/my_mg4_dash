@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../app_settings.dart';
 import '../settings_typography.dart';
 import '../settings_view.dart';
@@ -31,13 +32,14 @@ class SettingsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           section.label,
           style: TextStyle(
-            color: Colors.white,
+            color: ink.primary,
             fontSize: typo.sectionTitle,
             fontWeight: FontWeight.w700,
           ),
@@ -46,7 +48,7 @@ class SettingsContent extends StatelessWidget {
         Text(
           _subtitleFor(section),
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.72),
+            color: ink.secondary,
             fontSize: typo.sectionSubtitle,
             fontWeight: FontWeight.w500,
           ),
@@ -153,6 +155,7 @@ class _AppearanceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -213,7 +216,7 @@ class _AppearanceSection extends StatelessWidget {
         Text(
           'Dimensione caratteri',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.72),
+            color: ink.secondary,
             fontSize: typo.detailLabel,
             fontWeight: FontWeight.w600,
           ),
@@ -270,7 +273,7 @@ class _AppearanceSection extends StatelessWidget {
         Text(
           'Pannelli',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.72),
+            color: ink.secondary,
             fontSize: typo.detailLabel,
             fontWeight: FontWeight.w600,
           ),
@@ -297,18 +300,20 @@ class _AppearanceSection extends StatelessWidget {
         SizedBox(height: 10.h),
         _SliderTile(
           icon: Icons.opacity_outlined,
-          title: 'Trasparenza tinta',
-          value: settings.panelTintAlpha,
-          min: 0.0,
-          max: 0.25,
-          divisions: 25,
+          title: 'Opacità pannelli',
+          value: settings.panelTintAlpha.clamp(0.05, 0.90),
+          min: 0.05,
+          max: 0.90,
+          divisions: 85,
           valueLabel: '${(settings.panelTintAlpha * 100).round()}%',
+          note:
+              'Regola questo valore in modo tale che tutto sia ben leggibile con lo sfondo corrente',
           onChanged: (v) {
             onUpdateSettings(settings.copyWith(panelTintAlpha: v));
             onShowDetail(
-              title: 'Trasparenza pannelli',
+              title: 'Opacità pannelli',
               description:
-                  'Regola l’intensità della tinta dei pannelli. Valori più bassi rendono il vetro più trasparente.',
+                  'Regola l’opacità della tinta dei pannelli (5–90%). Aumenta o riduci per mantenere i contenuti ben leggibili con lo sfondo corrente.',
               icon: Icons.opacity_outlined,
             );
           },
@@ -504,10 +509,11 @@ class _OptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
-    final Color fg = selected ? const Color(0xFF101418) : Colors.white;
+    final ink = AdaptiveInk.of(context);
+    final Color fg = selected ? ink.onActive : ink.primary;
     final Color sub = selected
-        ? const Color(0xFF101418).withValues(alpha: 0.75)
-        : Colors.white.withValues(alpha: 0.72);
+        ? ink.onActive.withValues(alpha: 0.75)
+        : ink.secondary;
     return _BaseTile(
       selected: selected,
       onTap: onTap,
@@ -562,12 +568,13 @@ class _ToggleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return _BaseTile(
       selected: value,
       onTap: () => onChanged(!value),
       child: Row(
         children: [
-          Icon(icon, size: typo.tileIcon, color: Colors.white),
+          Icon(icon, size: typo.tileIcon, color: ink.primary),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -575,13 +582,13 @@ class _ToggleTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: ink.primary,
                         fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
                 Text(subtitle,
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.72),
+                        color: ink.secondary,
                         fontSize: typo.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
@@ -613,12 +620,13 @@ class _ActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return _BaseTile(
       selected: false,
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: typo.tileIcon, color: Colors.white),
+          Icon(icon, size: typo.tileIcon, color: ink.primary),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -626,7 +634,7 @@ class _ActionTile extends StatelessWidget {
               children: [
                 Text(title,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: ink.primary,
                         fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700)),
                 SizedBox(height: 2.h),
@@ -634,7 +642,7 @@ class _ActionTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.72),
+                        color: ink.secondary,
                         fontSize: typo.tileSubtitle,
                         fontWeight: FontWeight.w500)),
               ],
@@ -660,6 +668,7 @@ class _BaseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -668,12 +677,11 @@ class _BaseTile extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             color: selected
-                ? Colors.white.withValues(alpha: 0.20)
-                : Colors.white.withValues(alpha: 0.08),
+                ? ink.primary.withValues(alpha: 0.20)
+                : ink.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: Colors.white
-                  .withValues(alpha: selected ? 0.34 : 0.14),
+              color: ink.primary.withValues(alpha: selected ? 0.34 : 0.14),
             ),
           ),
           child: ConstrainedBox(
@@ -697,6 +705,7 @@ class _SimpleSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return GestureDetector(
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
@@ -705,10 +714,10 @@ class _SimpleSwitch extends StatelessWidget {
         height: typo.switchHeight,
         padding: EdgeInsets.all(typo.switchPadding),
         decoration: BoxDecoration(
-          color: value ? Colors.white : Colors.white.withValues(alpha: 0.12),
+          color: value ? ink.primary : ink.primary.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
-            color: Colors.white.withValues(alpha: value ? 0 : 0.20),
+            color: ink.primary.withValues(alpha: value ? 0 : 0.20),
           ),
         ),
         child: AnimatedAlign(
@@ -718,7 +727,7 @@ class _SimpleSwitch extends StatelessWidget {
             width: typo.switchThumb,
             height: typo.switchThumb,
             decoration: BoxDecoration(
-              color: value ? const Color(0xFF101418) : Colors.white,
+              color: value ? ink.onActive : ink.primary,
               shape: BoxShape.circle,
             ),
           ),
@@ -734,9 +743,10 @@ class _ChevronIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Icon(
       Icons.chevron_right,
-      color: Colors.white.withValues(alpha: 0.55),
+      color: ink.tertiary,
       size: typo.chevronIcon,
     );
   }
@@ -752,6 +762,7 @@ class _SliderTile extends StatelessWidget {
     required this.divisions,
     required this.valueLabel,
     required this.onChanged,
+    this.note,
   });
 
   final IconData icon;
@@ -762,15 +773,17 @@ class _SliderTile extends StatelessWidget {
   final int divisions;
   final String valueLabel;
   final ValueChanged<double> onChanged;
+  final String? note;
 
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: ink.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.14)),
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: 48.h),
@@ -781,13 +794,13 @@ class _SliderTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(icon, size: typo.tileIcon, color: Colors.white),
+                  Icon(icon, size: typo.tileIcon, color: ink.primary),
                   SizedBox(width: 12.w),
                   Expanded(
                     child: Text(
                       title,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: ink.primary,
                         fontSize: typo.tileTitle,
                         fontWeight: FontWeight.w700,
                       ),
@@ -796,7 +809,7 @@ class _SliderTile extends StatelessWidget {
                   Text(
                     valueLabel,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.78),
+                      color: ink.secondary,
                       fontSize: typo.tileSubtitle,
                       fontWeight: FontWeight.w600,
                     ),
@@ -810,10 +823,10 @@ class _SliderTile extends StatelessWidget {
                       RoundSliderThumbShape(enabledThumbRadius: 7.r),
                   overlayShape:
                       RoundSliderOverlayShape(overlayRadius: 14.r),
-                  activeTrackColor: Colors.white,
-                  inactiveTrackColor: Colors.white.withValues(alpha: 0.22),
-                  thumbColor: Colors.white,
-                  overlayColor: Colors.white.withValues(alpha: 0.12),
+                  activeTrackColor: ink.primary,
+                  inactiveTrackColor: ink.primary.withValues(alpha: 0.22),
+                  thumbColor: ink.primary,
+                  overlayColor: ink.primary.withValues(alpha: 0.12),
                 ),
                 child: Slider(
                   value: value.clamp(min, max),
@@ -824,6 +837,18 @@ class _SliderTile extends StatelessWidget {
                   onChanged: onChanged,
                 ),
               ),
+              if (note != null) ...[
+                SizedBox(height: 2.h),
+                Text(
+                  note!,
+                  style: TextStyle(
+                    color: ink.secondary,
+                    fontSize: typo.note,
+                    fontWeight: FontWeight.w500,
+                    height: 1.3,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -839,25 +864,26 @@ class _InfoNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typo = SettingsTypography.of(context);
+    final ink = AdaptiveInk.of(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: ink.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.14)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.info_outline,
-              size: typo.noteIcon, color: Colors.white.withValues(alpha: 0.8)),
+              size: typo.noteIcon, color: ink.secondary),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.78),
+                color: ink.secondary,
                 fontSize: typo.note,
                 fontWeight: FontWeight.w500,
               ),

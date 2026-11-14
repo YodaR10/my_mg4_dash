@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_action_pill.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
@@ -11,6 +12,7 @@ class AppsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return HomeGlassTile(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
       child: Column(
@@ -45,7 +47,7 @@ class AppsModule extends StatelessWidget {
             trailing: Icon(
               Icons.chevron_right_rounded,
               size: 15.w,
-              color: Colors.white.withValues(alpha: 0.54),
+              color: ink.tertiary,
             ),
           ),
         ],
@@ -65,23 +67,24 @@ class _AppTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: ink.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.16)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 22.w, color: Colors.white),
+          Icon(icon, size: 22.w, color: ink.primary),
           SizedBox(height: 3.h),
           Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white,
+              color: ink.primary,
               fontSize: 9.sp,
               fontWeight: FontWeight.w600,
             ),

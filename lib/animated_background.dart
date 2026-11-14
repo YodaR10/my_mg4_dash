@@ -77,46 +77,36 @@ class WavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final bool dark = brightness == Brightness.dark;
-    // Muted base and waves to avoid an overly bright background.
+    // Keep the original neon palette for both themes (light stays vivid).
     final bgPaint = Paint()
-      ..color = dark ? const Color(0xFF0B1020) : const Color(0xFFB8C2CF)
+      ..color = const Color(0xFF0F172A)
       ..style = PaintingStyle.fill;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), bgPaint);
 
-    final double intensity = dark ? 0.22 : 0.14;
     final waves = [
       WaveConfig(
-        color: (dark ? Colors.cyanAccent : Colors.blueGrey).withValues(
-          alpha: intensity + 0.04,
-        ),
+        color: Colors.cyanAccent.withValues(alpha: 0.4),
         amplitude: 30.0,
         frequency: 1.5,
         phaseShift: progress * 2 * math.pi,
         verticalOffset: size.height * 0.5,
       ),
       WaveConfig(
-        color: (dark ? Colors.indigoAccent : Colors.indigo).withValues(
-          alpha: intensity + 0.02,
-        ),
+        color: Colors.purpleAccent.withValues(alpha: 0.4),
         amplitude: 45.0,
         frequency: 1.0,
         phaseShift: (progress * 2 * math.pi) + (math.pi / 3),
         verticalOffset: size.height * 0.55,
       ),
       WaveConfig(
-        color: (dark ? Colors.blueAccent : Colors.blueGrey).withValues(
-          alpha: intensity,
-        ),
+        color: Colors.blueAccent.withValues(alpha: 0.3),
         amplitude: 25.0,
         frequency: 2.0,
         phaseShift: (progress * 2 * math.pi) - (math.pi / 2),
         verticalOffset: size.height * 0.45,
       ),
       WaveConfig(
-        color: (dark ? Colors.deepPurpleAccent : Colors.blueGrey).withValues(
-          alpha: intensity - 0.02,
-        ),
+        color: Colors.pinkAccent.withValues(alpha: 0.25),
         amplitude: 50.0,
         frequency: 0.8,
         phaseShift: (progress * 2 * math.pi) + math.pi,

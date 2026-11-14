@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
+
 /// Mock action chip used inside the homepage cards.
 ///
 /// These are plain translucent fills, not `LiquidGlassLens`es: the card is the
@@ -25,7 +27,8 @@ class HomeActionPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color foreground = active ? const Color(0xFF101418) : Colors.white;
+    final ink = AdaptiveInk.of(context);
+    final Color foreground = active ? ink.onActive : ink.primary;
     final Widget text = Text(
       label,
       maxLines: 1,
@@ -40,10 +43,10 @@ class HomeActionPill extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: active ? Colors.white : Colors.white.withValues(alpha: 0.09),
+        color: active ? ink.primary : ink.primary.withValues(alpha: 0.09),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
-          color: Colors.white.withValues(alpha: active ? 0 : 0.16),
+          color: ink.primary.withValues(alpha: active ? 0 : 0.16),
         ),
       ),
       child: Row(

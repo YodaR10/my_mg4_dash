@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
 
@@ -54,16 +55,17 @@ class _DestinationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 9.w),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: ink.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.14)),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 19.w, color: Colors.white),
+          Icon(icon, size: 19.w, color: ink.primary),
           SizedBox(width: 8.w),
           Expanded(
             child: Column(
@@ -75,7 +77,7 @@ class _DestinationButton extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: ink.primary,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
                   ),
@@ -85,7 +87,7 @@ class _DestinationButton extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: ink.secondary,
                     fontSize: 9.5.sp,
                   ),
                 ),
@@ -95,7 +97,7 @@ class _DestinationButton extends StatelessWidget {
           Icon(
             Icons.chevron_right_rounded,
             size: 16.w,
-            color: Colors.white.withValues(alpha: 0.54),
+            color: ink.tertiary,
           ),
         ],
       ),

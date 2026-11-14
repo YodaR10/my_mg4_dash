@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
 
@@ -22,7 +23,7 @@ class ClimateModule extends StatelessWidget {
             label: 'Clima',
           ),
           SizedBox(height: 7.h),
-          const Expanded(
+          Expanded(
             flex: 1,
             child: Row(
               children: [
@@ -48,7 +49,7 @@ class ClimateModule extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5.w),
-                      const Expanded(
+                      Expanded(
                         child: _ClimateToggle(
                           icon: Icons.ac_unit_rounded,
                           label: 'A/C',
@@ -56,7 +57,7 @@ class ClimateModule extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 5.w),
-                      const Expanded(
+                      Expanded(
                         child: _ClimateToggle(
                           icon: Icons.loop_rounded,
                           label: 'Ricircolo',
@@ -67,7 +68,7 @@ class ClimateModule extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 7.h),
-                const Expanded(
+                Expanded(
                   child: Row(
                     children: [
                       Expanded(
@@ -77,7 +78,7 @@ class ClimateModule extends StatelessWidget {
                           level: 2,
                         ),
                       ),
-                      SizedBox(width: 5),
+                      SizedBox(width: 5.w),
                       Expanded(
                         child: _SeatControl(
                           icon: Icons.drive_eta_rounded,
@@ -85,7 +86,7 @@ class ClimateModule extends StatelessWidget {
                           level: 1,
                         ),
                       ),
-                      SizedBox(width: 5),
+                      SizedBox(width: 5.w),
                       Expanded(
                         child: _SeatControl(
                           icon: Icons.event_seat_rounded,
@@ -110,6 +111,7 @@ class _Temperature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +122,7 @@ class _Temperature extends StatelessWidget {
           child: Text(
             '21.5°',
             style: TextStyle(
-              color: Colors.white,
+              color: ink.primary,
               fontSize: 30.sp,
               fontWeight: FontWeight.w300,
               height: 1,
@@ -133,7 +135,7 @@ class _Temperature extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: ink.secondary,
             fontSize: 8.5.sp,
           ),
         ),
@@ -147,10 +149,11 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Container(
       width: 1,
       margin: EdgeInsets.symmetric(horizontal: 9.w),
-      color: Colors.white.withValues(alpha: 0.12),
+      color: ink.primary.withValues(alpha: 0.12),
     );
   }
 }
@@ -160,6 +163,7 @@ class _FanLevel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,13 +173,13 @@ class _FanLevel extends StatelessWidget {
             Icon(
               Icons.air_rounded,
               size: 17.w,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: ink.secondary,
             ),
             SizedBox(width: 5.w),
             Text(
               'Ventola',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.75),
+                color: ink.secondary,
                 fontSize: 9.5.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -194,7 +198,7 @@ class _FanLevel extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: i < 2
                       ? const Color(0xFF67E8F9)
-                      : Colors.white.withValues(alpha: 0.16),
+                      : ink.primary.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
@@ -204,7 +208,7 @@ class _FanLevel extends StatelessWidget {
         Text(
           'Livello 2',
           style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.55),
+            color: ink.tertiary,
             fontSize: 8.5.sp,
           ),
         ),
@@ -226,15 +230,16 @@ class _ClimateToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color foreground = active ? const Color(0xFF101418) : Colors.white;
+    final ink = AdaptiveInk.of(context);
+    final Color foreground = active ? ink.onActive : ink.primary;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: active ? Colors.white : Colors.white.withValues(alpha: 0.07),
+        color: active ? ink.primary : ink.primary.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.white.withValues(alpha: active ? 0 : 0.14),
+          color: ink.primary.withValues(alpha: active ? 0 : 0.14),
         ),
       ),
       child: Column(
@@ -243,9 +248,7 @@ class _ClimateToggle extends StatelessWidget {
           Icon(
             icon,
             size: 15.w,
-            color: active
-                ? const Color(0xFF101418)
-                : Colors.white.withValues(alpha: 0.7),
+            color: active ? ink.onActive : ink.secondary,
           ),
           SizedBox(height: 2.h),
           Text(
@@ -277,14 +280,15 @@ class _SeatControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     final bool active = level > 0;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
+        color: ink.primary.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.12)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -294,7 +298,7 @@ class _SeatControl extends StatelessWidget {
             size: 16.w,
             color: active
                 ? ClimateModule._amber
-                : Colors.white.withValues(alpha: 0.5),
+                : ink.tertiary,
           ),
           SizedBox(height: 2.h),
           Text(
@@ -302,7 +306,7 @@ class _SeatControl extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.65),
+              color: ink.secondary,
               fontSize: 7.5.sp,
               fontWeight: FontWeight.w600,
             ),
@@ -319,7 +323,7 @@ class _SeatControl extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: i < level
                         ? ClimateModule._amber
-                        : Colors.white.withValues(alpha: 0.16),
+                        : ink.primary.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),

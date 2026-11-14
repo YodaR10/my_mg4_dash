@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
 
@@ -10,6 +11,7 @@ class RadioModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return HomeGlassTile(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
       child: Column(
@@ -21,7 +23,7 @@ class RadioModule extends StatelessWidget {
             trailing: Text(
               'FM 102.5',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.65),
+                color: ink.secondary,
                 fontSize: 9.5.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -59,7 +61,7 @@ class RadioModule extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white,
+              color: ink.primary,
               fontSize: 13.sp,
               fontWeight: FontWeight.w700,
             ),
@@ -69,7 +71,7 @@ class RadioModule extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.65),
+              color: ink.secondary,
               fontSize: 10.sp,
             ),
           ),
@@ -82,14 +84,14 @@ class RadioModule extends StatelessWidget {
               Container(
                 width: 42.w,
                 height: 42.w,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: ink.primary,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.play_arrow_rounded,
                   size: 27.w,
-                  color: const Color(0xFF101418),
+                  color: ink.onActive,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -113,21 +115,22 @@ class _Cover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: selected ? 0.16 : 0.08),
+          color: ink.primary.withValues(alpha: selected ? 0.16 : 0.08),
           borderRadius: BorderRadius.circular(13),
           border: Border.all(
-            color: Colors.white.withValues(alpha: selected ? 0.9 : 0.18),
+            color: ink.primary.withValues(alpha: selected ? 0.9 : 0.18),
             width: selected ? 2 : 1,
           ),
         ),
         child: Icon(
           icon,
           size: 22.w,
-          color: Colors.white.withValues(alpha: 0.9),
+          color: ink.primary.withValues(alpha: 0.9),
         ),
       ),
     );
@@ -141,18 +144,19 @@ class _RoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Container(
       width: 34.w,
       height: 34.w,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: ink.primary.withValues(alpha: 0.08),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        border: Border.all(color: ink.primary.withValues(alpha: 0.16)),
       ),
       child: Icon(
         icon,
         size: 18.w,
-        color: Colors.white.withValues(alpha: 0.85),
+        color: ink.primary.withValues(alpha: 0.85),
       ),
     );
   }

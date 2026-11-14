@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
 
@@ -10,6 +11,7 @@ class AmbientModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return HomeGlassTile(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
       child: Column(
@@ -32,7 +34,7 @@ class AmbientModule extends StatelessWidget {
                     Text(
                       '18°',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: ink.primary,
                         fontSize: 25.sp,
                         fontWeight: FontWeight.w700,
                         height: 1,
@@ -43,7 +45,7 @@ class AmbientModule extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.65),
+                        color: ink.secondary,
                         fontSize: 9.5.sp,
                       ),
                     ),
@@ -56,7 +58,7 @@ class AmbientModule extends StatelessWidget {
                   Text(
                     '14:32',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: ink.primary,
                       fontSize: 19.sp,
                       fontWeight: FontWeight.w700,
                       height: 1,
@@ -66,7 +68,7 @@ class AmbientModule extends StatelessWidget {
                     'Sab 14 nov',
                     maxLines: 1,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.65),
+                      color: ink.secondary,
                       fontSize: 9.sp,
                     ),
                   ),

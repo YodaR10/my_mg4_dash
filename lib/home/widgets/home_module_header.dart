@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
+
 /// Small label shared by the homepage cards.
 class HomeModuleHeader extends StatelessWidget {
   const HomeModuleHeader({
@@ -16,9 +18,10 @@ class HomeModuleHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return Row(
       children: [
-        Icon(icon, size: 14.w, color: Colors.white.withValues(alpha: 0.7)),
+        Icon(icon, size: 14.w, color: ink.secondary),
         SizedBox(width: 5.w),
         Expanded(
           child: Text(
@@ -26,7 +29,7 @@ class HomeModuleHeader extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.72),
+              color: ink.secondary,
               fontSize: 10.5.sp,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.4,

@@ -160,7 +160,9 @@ class _CardContent extends StatelessWidget {
           Text(
             'Liquid Glass',
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : const Color(0xFF101418),
               fontSize: 19.sp * scale,
               fontWeight: FontWeight.w800,
             ),
@@ -168,7 +170,12 @@ class _CardContent extends StatelessWidget {
           SizedBox(height: 4),
           Text(
             'Refraction over a live photo',
-            style: TextStyle(color: Colors.white70, fontSize: 12.sp * scale),
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white70
+                  : const Color(0xB8101418),
+              fontSize: 12.sp * scale,
+            ),
           ),
         ],
       ),

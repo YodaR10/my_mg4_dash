@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../ui/adaptive_ink.dart';
 import '../widgets/home_glass_tile.dart';
 import '../widgets/home_module_header.dart';
 
@@ -12,6 +13,7 @@ class AndroidAutoModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = AdaptiveInk.of(context);
     return HomeGlassTile(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
       child: Column(
@@ -51,7 +53,7 @@ class AndroidAutoModule extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: ink.primary,
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                           ),
@@ -61,7 +63,7 @@ class AndroidAutoModule extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: ink.secondary,
                             fontSize: 9.5.sp,
                           ),
                         ),
@@ -71,7 +73,7 @@ class AndroidAutoModule extends StatelessWidget {
                   Icon(
                     Icons.link_rounded,
                     size: 18.w,
-                    color: Colors.white.withValues(alpha: 0.54),
+                    color: ink.tertiary,
                   ),
                 ],
               ),

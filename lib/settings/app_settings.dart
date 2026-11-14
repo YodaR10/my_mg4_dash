@@ -39,7 +39,7 @@ class AppSettings {
   /// Gaussian blur sigma for glass panels.
   final double panelBlur;
 
-  /// Tint opacity for glass panels (0.0 = fully transparent tint).
+  /// Panel tint opacity (0.05 = 5%, 0.90 = 90%).
   final double panelTintAlpha;
 
   ThemeMode get themeMode => switch (themePreference) {
@@ -83,7 +83,7 @@ class AppSettings {
       hideBottomSystemBar: prefs.getBool(_kHideBottomSystemBar) ?? false,
       panelBlur: (prefs.getDouble(_kPanelBlur) ?? 2.0).clamp(0.0, 12.0),
       panelTintAlpha:
-          (prefs.getDouble(_kPanelTintAlpha) ?? 0.08).clamp(0.0, 0.4),
+          (prefs.getDouble(_kPanelTintAlpha) ?? 0.08).clamp(0.05, 0.90),
     );
   }
 
