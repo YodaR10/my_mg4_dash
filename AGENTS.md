@@ -27,6 +27,12 @@ Consequences, already applied to the repo:
 - Never add a web/desktop target back "just to preview". The AAOS emulator is
   the preview: it runs the same Impeller/Skia pipeline as the car.
 
+## Distribution (MG4)
+
+- **Target vehicle:** MG4 exclusively (infotainment based on Android Automotive under MG/SAIC iSMART, as discussed on XDA).
+- **Initial install:** sideload the release APK from a **USB stick** on the MG4 head unit.
+- **Updates:** build on PC, then publish the updated APK to **GitHub Releases** (downloadable for subsequent installs). Channels (alpha/beta/stable) follow release tags/pre-release flags on GitHub.
+
 ## Stack
 
 - Flutter / Dart SDK `^3.13.7`
