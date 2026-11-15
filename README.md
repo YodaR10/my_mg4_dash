@@ -1,4 +1,4 @@
-# liquid_glass_demo
+# my_mg4_dash
 
 Flutter **Android Automotive (AAOS)** infotainment demo built on
 [`liquid_glass_easy`](https://pub.dev/packages/liquid_glass_easy) — an

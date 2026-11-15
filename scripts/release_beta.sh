@@ -56,7 +56,7 @@ BUILD_NAME="${VERSION}-beta.${BETA_N}"
 TAG="v${BUILD_NAME}"
 APK_SRC="build/app/outputs/flutter-apk/app-release.apk"
 OUT_DIR="build/release"
-APK_OUT="${OUT_DIR}/liquid_glass_demo-${BUILD_NAME}+${BUILD_NUMBER}.apk"
+APK_OUT="${OUT_DIR}/my_mg4_dash-${BUILD_NAME}+${BUILD_NUMBER}.apk"
 
 echo "==> Beta release"
 echo "    versionName : ${BUILD_NAME}"

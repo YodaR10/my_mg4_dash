@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/features/settings/domain/app_settings.dart';
-import 'package:liquid_glass_demo/src/features/settings/presentation/settings_typography.dart';
+import 'package:my_mg4_dash/src/features/settings/domain/app_settings.dart';
+import 'package:my_mg4_dash/src/features/settings/presentation/settings_typography.dart';
 
 void main() {
   group('SettingsTypography', () {

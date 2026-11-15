@@ -43,20 +43,20 @@ class UpdateCheckResult {
     required String currentBuild,
     AppReleaseInfo? latest,
   }) => UpdateCheckResult._(
-        currentVersion: currentVersion,
-        currentBuild: currentBuild,
-        latest: latest,
-      );
+    currentVersion: currentVersion,
+    currentBuild: currentBuild,
+    latest: latest,
+  );
 
   factory UpdateCheckResult.failure({
     required String currentVersion,
     required String currentBuild,
     required String error,
   }) => UpdateCheckResult._(
-        currentVersion: currentVersion,
-        currentBuild: currentBuild,
-        error: error,
-      );
+    currentVersion: currentVersion,
+    currentBuild: currentBuild,
+    error: error,
+  );
 
   final String currentVersion;
   final String currentBuild;
@@ -74,7 +74,8 @@ bool _isNewer(String remote, String current) {
   // Confronto semplice: normalizza rimuovendo prefisso 'v' e confronta
   // versionName+build non sempre disponibile da GitHub; qui usiamo versionName.
   // Se uguali come stringa, non è più nuovo. Se diverse, prova confronto semver base.
-  String norm(String v) => v.trim().replaceFirst(RegExp(r'^v', caseSensitive: false), '');
+  String norm(String v) =>
+      v.trim().replaceFirst(RegExp(r'^v', caseSensitive: false), '');
   final r = norm(remote);
   final c = norm(current);
   if (r == c) return false;
@@ -102,7 +103,9 @@ class _VerParts {
 _VerParts? _parseParts(String v) {
   final mainAndPre = v.split('-');
   final coreStr = mainAndPre.first.split('+').first;
-  final pre = mainAndPre.length > 1 ? mainAndPre.sublist(1).join('-').split('+').first : null;
+  final pre = mainAndPre.length > 1
+      ? mainAndPre.sublist(1).join('-').split('+').first
+      : null;
   final nums = <int>[];
   for (final p in coreStr.split('.')) {
     final n = int.tryParse(p);
@@ -114,15 +117,15 @@ _VerParts? _parseParts(String v) {
 
 class AppUpdateService {
   AppUpdateService({http.Client? client, String? repo})
-      : _client = client ?? http.Client(),
-        _repo = repo ?? 'YodaR10/my_mg4_dash';
+    : _client = client ?? http.Client(),
+      _repo = repo ?? 'YodaR10/my_mg4_dash';
 
   final http.Client _client;
   final String _repo;
 
   static const _headers = {
     'Accept': 'application/vnd.github+json',
-    'User-Agent': 'liquid_glass_demo-updater',
+    'User-Agent': 'my_mg4_dash-updater',
   };
 
   Future<UpdateCheckResult> check(AppUpdateChannel channel) async {
@@ -194,7 +197,10 @@ class AppUpdateService {
     }
     if (apk == null) return null;
     final tag = map['tag_name'] as String? ?? '';
-    final versionName = tag.replaceFirst(RegExp(r'^v', caseSensitive: false), '');
+    final versionName = tag.replaceFirst(
+      RegExp(r'^v', caseSensitive: false),
+      '',
+    );
     return AppReleaseInfo(
       tag: tag,
       name: map['name'] as String? ?? tag,

@@ -57,26 +57,22 @@ class SettingsContent extends StatelessWidget {
           ),
         ),
         SizedBox(height: 14.h),
-        Expanded(
-          child: SingleChildScrollView(
-            child: _buildBody(context),
-          ),
-        ),
+        Expanded(child: SingleChildScrollView(child: _buildBody(context))),
       ],
     );
   }
 
   String _subtitleFor(SettingsSection section) => switch (section) {
-        SettingsSection.appearance => 'Personalizza il tema dell’interfaccia.',
-        SettingsSection.screen =>
-          'Gestisci le barre di sistema per la modalità fullscreen.',
-        SettingsSection.system => 'Aggiornamenti e informazioni di sistema.',
-        SettingsSection.audio => 'Impostazioni audio di base (mock).',
-        SettingsSection.connectivity => 'Connessioni e dispositivi (mock).',
-        SettingsSection.privacy => 'Privacy, permessi e sicurezza (mock).',
-        SettingsSection.diagnostics =>
-          'Raccogli ed esporta i log diagnostici su chiavetta USB.',
-      };
+    SettingsSection.appearance => 'Personalizza il tema dell’interfaccia.',
+    SettingsSection.screen =>
+      'Gestisci le barre di sistema per la modalità fullscreen.',
+    SettingsSection.system => 'Aggiornamenti e informazioni di sistema.',
+    SettingsSection.audio => 'Impostazioni audio di base (mock).',
+    SettingsSection.connectivity => 'Connessioni e dispositivi (mock).',
+    SettingsSection.privacy => 'Privacy, permessi e sicurezza (mock).',
+    SettingsSection.diagnostics =>
+      'Raccogli ed esporta i log diagnostici su chiavetta USB.',
+  };
 
   Widget _buildBody(BuildContext context) {
     switch (section) {
@@ -101,14 +97,26 @@ class SettingsContent extends StatelessWidget {
       case SettingsSection.audio:
         return _MockListSection(
           items: const [
-            _MockItem('Volume multimediale', Icons.volume_up_outlined,
-                'Regola il volume principale del sistema.'),
-            _MockItem('Suoni di sistema', Icons.notifications_active_outlined,
-                'Attiva o disattiva i feedback sonori.'),
-            _MockItem('Bilanciamento audio', Icons.equalizer_outlined,
-                'Configura bassi, medi e alti.'),
-            _MockItem('Uscita audio', Icons.speaker_outlined,
-                'Seleziona il dispositivo di riproduzione.'),
+            _MockItem(
+              'Volume multimediale',
+              Icons.volume_up_outlined,
+              'Regola il volume principale del sistema.',
+            ),
+            _MockItem(
+              'Suoni di sistema',
+              Icons.notifications_active_outlined,
+              'Attiva o disattiva i feedback sonori.',
+            ),
+            _MockItem(
+              'Bilanciamento audio',
+              Icons.equalizer_outlined,
+              'Configura bassi, medi e alti.',
+            ),
+            _MockItem(
+              'Uscita audio',
+              Icons.speaker_outlined,
+              'Seleziona il dispositivo di riproduzione.',
+            ),
           ],
           onNotImplemented: onNotImplemented,
           onShowDetail: onShowDetail,
@@ -117,14 +125,26 @@ class SettingsContent extends StatelessWidget {
       case SettingsSection.connectivity:
         return _MockListSection(
           items: const [
-            _MockItem('Wi‑Fi', Icons.wifi_outlined,
-                'Gestisci reti wireless disponibili.'),
-            _MockItem('Bluetooth', Icons.bluetooth_outlined,
-                'Associa e gestisci dispositivi Bluetooth.'),
-            _MockItem('Android Auto', Icons.directions_car_outlined,
-                'Configura la connessione con il telefono.'),
-            _MockItem('Hotspot', Icons.wifi_tethering_outlined,
-                'Condividi la connessione del veicolo.'),
+            _MockItem(
+              'Wi‑Fi',
+              Icons.wifi_outlined,
+              'Gestisci reti wireless disponibili.',
+            ),
+            _MockItem(
+              'Bluetooth',
+              Icons.bluetooth_outlined,
+              'Associa e gestisci dispositivi Bluetooth.',
+            ),
+            _MockItem(
+              'Android Auto',
+              Icons.directions_car_outlined,
+              'Configura la connessione con il telefono.',
+            ),
+            _MockItem(
+              'Hotspot',
+              Icons.wifi_tethering_outlined,
+              'Condividi la connessione del veicolo.',
+            ),
           ],
           onNotImplemented: onNotImplemented,
           onShowDetail: onShowDetail,
@@ -133,14 +153,26 @@ class SettingsContent extends StatelessWidget {
       case SettingsSection.privacy:
         return _MockListSection(
           items: const [
-            _MockItem('Permessi app', Icons.app_settings_alt_outlined,
-                'Controlla i permessi concessi alle app.'),
-            _MockItem('Posizione', Icons.location_on_outlined,
-                'Gestisci accesso e precisione della posizione.'),
-            _MockItem('Dati diagnostici', Icons.analytics_outlined,
-                'Scegli quali dati condividere.'),
-            _MockItem('Ripristino impostazioni', Icons.restart_alt_outlined,
-                'Reimposta le preferenze ai valori iniziali.'),
+            _MockItem(
+              'Permessi app',
+              Icons.app_settings_alt_outlined,
+              'Controlla i permessi concessi alle app.',
+            ),
+            _MockItem(
+              'Posizione',
+              Icons.location_on_outlined,
+              'Gestisci accesso e precisione della posizione.',
+            ),
+            _MockItem(
+              'Dati diagnostici',
+              Icons.analytics_outlined,
+              'Scegli quali dati condividere.',
+            ),
+            _MockItem(
+              'Ripristino impostazioni',
+              Icons.restart_alt_outlined,
+              'Reimposta le preferenze ai valori iniziali.',
+            ),
           ],
           onNotImplemented: onNotImplemented,
           onShowDetail: onShowDetail,
@@ -186,8 +218,7 @@ class _AppearanceSection extends StatelessWidget {
             );
             onShowDetail(
               title: 'Tema: Sistema',
-              description:
-                  'L’app usa automaticamente il tema chiaro o scuro in base alle impostazioni di sistema.',
+              description: 'L’app usa automaticamente il tema chiaro o scuro in base alle impostazioni di sistema.',
               icon: Icons.brightness_auto_outlined,
             );
           },
@@ -205,8 +236,7 @@ class _AppearanceSection extends StatelessWidget {
             );
             onShowDetail(
               title: 'Tema: Chiaro',
-              description:
-                  'L’app utilizza sempre il tema chiaro, indipendentemente dal sistema.',
+              description: 'L’app utilizza sempre il tema chiaro, indipendentemente dal sistema.',
               icon: Icons.light_mode_outlined,
             );
           },
@@ -224,8 +254,7 @@ class _AppearanceSection extends StatelessWidget {
             );
             onShowDetail(
               title: 'Tema: Scuro',
-              description:
-                  'L’app utilizza sempre il tema scuro, indipendentemente dal sistema.',
+              description: 'L’app utilizza sempre il tema scuro, indipendentemente dal sistema.',
               icon: Icons.dark_mode_outlined,
             );
           },
@@ -250,8 +279,7 @@ class _AppearanceSection extends StatelessWidget {
             onUpdateSettings(settings.copyWith(fontSize: AppFontSize.large));
             onShowDetail(
               title: 'Caratteri: Grande',
-              description:
-                  'Usa la dimensione dei caratteri predefinita per i pannelli diversi da Home.',
+              description: 'Usa la dimensione dei caratteri predefinita per i pannelli diversi da Home.',
               icon: Icons.format_size_outlined,
             );
           },
@@ -267,8 +295,7 @@ class _AppearanceSection extends StatelessWidget {
             onUpdateSettings(settings.copyWith(fontSize: AppFontSize.medium));
             onShowDetail(
               title: 'Caratteri: Medio',
-              description:
-                  'Riduce leggermente i caratteri nei pannelli diversi da Home per mostrare più informazioni.',
+              description: 'Riduce leggermente i caratteri nei pannelli diversi da Home per mostrare più informazioni.',
               icon: Icons.format_size_outlined,
             );
           },
@@ -284,8 +311,7 @@ class _AppearanceSection extends StatelessWidget {
             onUpdateSettings(settings.copyWith(fontSize: AppFontSize.small));
             onShowDetail(
               title: 'Caratteri: Piccolo',
-              description:
-                  'Riduce ulteriormente i caratteri nei pannelli diversi da Home per massimizzare le informazioni a schermo.',
+              description: 'Riduce ulteriormente i caratteri nei pannelli diversi da Home per massimizzare le informazioni a schermo.',
               icon: Icons.format_size_outlined,
             );
           },
@@ -313,8 +339,7 @@ class _AppearanceSection extends StatelessWidget {
             onUpdateSettings(settings.copyWith(panelBlur: v));
             onShowDetail(
               title: 'Sfocatura pannelli',
-              description:
-                  'Regola la sfocatura del vetro dei pannelli. Valori bassi (0–2) migliorano molto le prestazioni su dispositivi meno potenti; la tinta compensa la leggibilità.',
+              description: 'Regola la sfocatura del vetro dei pannelli. Valori bassi (0–2) migliorano molto le prestazioni su dispositivi meno potenti; la tinta compensa la leggibilità.',
               icon: Icons.blur_on_outlined,
             );
           },
@@ -329,14 +354,12 @@ class _AppearanceSection extends StatelessWidget {
           divisions: 85,
           valueLabel: '${(settings.panelTintAlpha * 100).round()}%',
           fontSize: settings.fontSize,
-          note:
-              'Regola questo valore in modo tale che tutto sia ben leggibile con lo sfondo corrente',
+          note: 'Regola questo valore in modo tale che tutto sia ben leggibile con lo sfondo corrente',
           onChanged: (v) {
             onUpdateSettings(settings.copyWith(panelTintAlpha: v));
             onShowDetail(
               title: 'Opacità pannelli',
-              description:
-                  'Regola l’opacità della tinta dei pannelli (5–90%). Aumenta o riduci per mantenere i contenuti ben leggibili con lo sfondo corrente.',
+              description: 'Regola l’opacità della tinta dei pannelli (5–90%). Aumenta o riduci per mantenere i contenuti ben leggibili con lo sfondo corrente.',
               icon: Icons.opacity_outlined,
             );
           },
@@ -401,8 +424,7 @@ class _ScreenSection extends StatelessWidget {
         SizedBox(height: 12.h),
         _InfoNote(
           fontSize: settings.fontSize,
-          text:
-              'La barra di navigazione dell’app in basso resta sempre visibile. Puoi nascondere una o entrambe le barre di sistema.',
+          text: 'La barra di navigazione dell’app in basso resta sempre visibile. Puoi nascondere una o entrambe le barre di sistema.',
         ),
       ],
     );
@@ -452,9 +474,7 @@ class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
 
   String _versionDescription(UpdateCheckResult? result) {
     final info = _packageInfo;
-    final current = info == null
-        ? '—'
-        : '${info.version}+${info.buildNumber}';
+    final current = info == null ? '—' : '${info.version}+${info.buildNumber}';
     final channelLabel = widget.settings.updateChannel == AppUpdateChannel.beta
         ? 'Beta (pre-release)'
         : 'Stabile';
@@ -463,24 +483,39 @@ class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
       ..writeln('Canale aggiornamenti: $channelLabel');
     if (result != null) {
       if (result.error != null) {
-        buf..writeln()..writeln('Errore: ${result.error}');
+        buf
+          ..writeln()
+          ..writeln('Errore: ${result.error}');
       } else if (result.latest == null) {
-        buf..writeln()..writeln('Nessuna release trovata per questo canale.');
+        buf
+          ..writeln()
+          ..writeln('Nessuna release trovata per questo canale.');
       } else if (result.hasUpdate) {
         final l = result.latest!;
         buf
           ..writeln()
           ..writeln('Aggiornamento disponibile: ${l.versionName} (${l.tag})')
-          ..writeln(l.isPrerelease ? 'Tipo: pre-release (beta)' : 'Tipo: stabile');
+          ..writeln(
+            l.isPrerelease ? 'Tipo: pre-release (beta)' : 'Tipo: stabile',
+          );
         if (l.body.trim().isNotEmpty) {
           final notes = l.body.trim();
-          buf..writeln()..writeln('Note:')..writeln(notes.length > 600 ? '${notes.substring(0, 600)}…' : notes);
+          buf
+            ..writeln()
+            ..writeln('Note:')
+            ..writeln(
+              notes.length > 600 ? '${notes.substring(0, 600)}…' : notes,
+            );
         }
       } else {
-        buf..writeln()..writeln('L\'app è aggiornata per il canale selezionato.');
+        buf
+          ..writeln()
+          ..writeln('L\'app è aggiornata per il canale selezionato.');
       }
     } else {
-      buf..writeln()..writeln(_status);
+      buf
+        ..writeln()
+        ..writeln(_status);
     }
     return buf.toString();
   }
@@ -598,7 +633,9 @@ class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
           selected: widget.settings.updateChannel == AppUpdateChannel.stable,
           fontSize: widget.settings.fontSize,
           onTap: () {
-            widget.onUpdateSettings(widget.settings.copyWith(updateChannel: AppUpdateChannel.stable));
+            widget.onUpdateSettings(
+              widget.settings.copyWith(updateChannel: AppUpdateChannel.stable),
+            );
             widget.onShowDetail(
               title: 'Canale: Stabile',
               description: 'Verranno proposte solo le release stabili pubblicate su GitHub.',
@@ -614,7 +651,9 @@ class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
           selected: widget.settings.updateChannel == AppUpdateChannel.beta,
           fontSize: widget.settings.fontSize,
           onTap: () {
-            widget.onUpdateSettings(widget.settings.copyWith(updateChannel: AppUpdateChannel.beta));
+            widget.onUpdateSettings(
+              widget.settings.copyWith(updateChannel: AppUpdateChannel.beta),
+            );
             widget.onShowDetail(
               title: 'Canale: Beta',
               description: 'Verranno proposte le pre-release beta (tag con suffisso -beta) pubblicate su GitHub.',
@@ -684,14 +723,14 @@ class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
           SizedBox(height: 12.h),
           _InfoNote(
             fontSize: widget.settings.fontSize,
-            text: 'Note di rilascio (${latest.tag}):\n${latest.body.trim().length > 400 ? '${latest.body.trim().substring(0, 400)}…' : latest.body.trim()}',
+            text:
+                'Note di rilascio (${latest.tag}):\n${latest.body.trim().length > 400 ? '${latest.body.trim().substring(0, 400)}…' : latest.body.trim()}',
           ),
         ],
         SizedBox(height: 12.h),
         _InfoNote(
           fontSize: widget.settings.fontSize,
-          text:
-              'La verifica usa le Release GitHub del progetto (YodaR10/my_mg4_dash). Su MG4 l\'installazione dell\'APK richiede conferma e potrebbe dipendere dai permessi del sistema.',
+          text: 'La verifica usa le Release GitHub del progetto (YodaR10/my_mg4_dash). Su MG4 l\'installazione dell\'APK richiede conferma e potrebbe dipendere dai permessi del sistema.',
         ),
       ],
     );
@@ -781,17 +820,23 @@ class _OptionTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: TextStyle(
-                        color: fg,
-                        fontSize: typo.tileTitle,
-                        fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: fg,
+                    fontSize: typo.tileTitle,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(subtitle,
-                    style: TextStyle(
-                        color: sub,
-                        fontSize: typo.tileSubtitle,
-                        fontWeight: FontWeight.w500)),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: sub,
+                    fontSize: typo.tileSubtitle,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),
@@ -838,17 +883,23 @@ class _ToggleTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: TextStyle(
-                        color: ink.primary,
-                        fontSize: typo.tileTitle,
-                        fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: ink.primary,
+                    fontSize: typo.tileTitle,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(subtitle,
-                    style: TextStyle(
-                        color: ink.secondary,
-                        fontSize: typo.tileSubtitle,
-                        fontWeight: FontWeight.w500)),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: ink.secondary,
+                    fontSize: typo.tileSubtitle,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),
@@ -892,19 +943,25 @@ class _ActionTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: TextStyle(
-                        color: ink.primary,
-                        fontSize: typo.tileTitle,
-                        fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: ink.primary,
+                    fontSize: typo.tileTitle,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 2.h),
-                Text(subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: ink.secondary,
-                        fontSize: typo.tileSubtitle,
-                        fontWeight: FontWeight.w500)),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ink.secondary,
+                    fontSize: typo.tileSubtitle,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ],
             ),
           ),
@@ -1087,10 +1144,8 @@ class _SliderTile extends StatelessWidget {
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   trackHeight: 3.h,
-                  thumbShape:
-                      RoundSliderThumbShape(enabledThumbRadius: 7.r),
-                  overlayShape:
-                      RoundSliderOverlayShape(overlayRadius: 14.r),
+                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7.r),
+                  overlayShape: RoundSliderOverlayShape(overlayRadius: 14.r),
                   activeTrackColor: ink.primary,
                   inactiveTrackColor: ink.primary.withValues(alpha: 0.22),
                   thumbColor: ink.primary,
@@ -1145,8 +1200,7 @@ class _InfoNote extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline,
-              size: typo.noteIcon, color: ink.secondary),
+          Icon(Icons.info_outline, size: typo.noteIcon, color: ink.secondary),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
@@ -1196,7 +1250,9 @@ class _DiagnosticsSectionState extends State<_DiagnosticsSection> {
     widget.onShowDetail(
       title: 'Esportazione log',
       description: result,
-      icon: result.startsWith('Log esportato') ? Icons.check_circle_outline : Icons.usb_outlined,
+      icon: result.startsWith('Log esportato')
+          ? Icons.check_circle_outline
+          : Icons.usb_outlined,
     );
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1237,7 +1293,9 @@ class _DiagnosticsSectionState extends State<_DiagnosticsSection> {
         SizedBox(height: 10.h),
         _ActionTile(
           icon: Icons.usb_outlined,
-          title: _exporting ? 'Esportazione in corso…' : 'Esporta log su chiavetta USB',
+          title: _exporting
+              ? 'Esportazione in corso…'
+              : 'Esporta log su chiavetta USB',
           subtitle: 'Copia il file di log su una memoria USB collegata',
           fontSize: settings.fontSize,
           trailing: _exporting
@@ -1255,8 +1313,7 @@ class _DiagnosticsSectionState extends State<_DiagnosticsSection> {
         SizedBox(height: 12.h),
         _InfoNote(
           fontSize: settings.fontSize,
-          text:
-              '1) Inserisci una chiavetta USB.\n2) Attiva la raccolta log e riproduci il problema.\n3) Tocca “Esporta log su chiavetta USB”. Il file verrà salvato nella cartella liquid_glass_demo_logs sulla chiavetta (se accessibile).',
+          text: '1) Inserisci una chiavetta USB.\n2) Attiva la raccolta log e riproduci il problema.\n3) Tocca “Esporta log su chiavetta USB”. Il file verrà salvato nella cartella my_mg4_dash_logs sulla chiavetta (se accessibile).',
         ),
       ],
     );

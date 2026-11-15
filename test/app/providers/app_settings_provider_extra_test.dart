@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/app/providers/app_settings_provider.dart';
-import 'package:liquid_glass_demo/src/features/settings/domain/app_settings.dart';
+import 'package:my_mg4_dash/src/app/providers/app_settings_provider.dart';
+import 'package:my_mg4_dash/src/features/settings/domain/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -22,17 +22,14 @@ void main() {
 
   test('applySystemUi handles different overlay combinations', () async {
     await applySystemUi(const AppSettings());
-    await applySystemUi(const AppSettings(
-      hideTopSystemBar: true,
-      hideBottomSystemBar: false,
-    ));
-    await applySystemUi(const AppSettings(
-      hideTopSystemBar: false,
-      hideBottomSystemBar: true,
-    ));
-    await applySystemUi(const AppSettings(
-      hideTopSystemBar: true,
-      hideBottomSystemBar: true,
-    ));
+    await applySystemUi(
+      const AppSettings(hideTopSystemBar: true, hideBottomSystemBar: false),
+    );
+    await applySystemUi(
+      const AppSettings(hideTopSystemBar: false, hideBottomSystemBar: true),
+    );
+    await applySystemUi(
+      const AppSettings(hideTopSystemBar: true, hideBottomSystemBar: true),
+    );
   });
 }

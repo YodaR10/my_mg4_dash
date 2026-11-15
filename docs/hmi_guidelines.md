@@ -1,6 +1,6 @@
 # Automotive HMI Design Guidelines
 
-Reference for every screen in `liquid_glass_demo`. Derived from Apple CarPlay,
+Reference for every screen in `my_mg4_dash`. Derived from Apple CarPlay,
 Android Automotive OS and general automotive HMI practice, adapted to this
 project: a **landscape 960×360** infotainment surface built with
 `liquid_glass_easy` + `flutter_screenutil`.

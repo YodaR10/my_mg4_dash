@@ -1,4 +1,4 @@
-# AGENTS.md — liquid_glass_demo
+# AGENTS.md — my_mg4_dash
 
 Flutter demo app for iOS 26-style **Liquid Glass**, built on the
 [`liquid_glass_easy`](https://pub.dev/packages/liquid_glass_easy) package.

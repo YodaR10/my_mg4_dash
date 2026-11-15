@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "liquid_glass_demo",
+            "name": "my_mg4_dash",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "liquid_glass_demo (profile mode)",
+            "name": "my_mg4_dash (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "liquid_glass_demo (release mode)",
+            "name": "my_mg4_dash (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

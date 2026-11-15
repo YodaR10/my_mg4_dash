@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/features/settings/data/app_settings_repository.dart';
-import 'package:liquid_glass_demo/src/features/settings/domain/app_settings.dart';
+import 'package:my_mg4_dash/src/features/settings/data/app_settings_repository.dart';
+import 'package:my_mg4_dash/src/features/settings/domain/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

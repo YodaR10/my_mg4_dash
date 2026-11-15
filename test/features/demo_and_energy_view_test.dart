@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/app/providers/app_settings_provider.dart';
-import 'package:liquid_glass_demo/src/features/demo/presentation/demo_view.dart';
-import 'package:liquid_glass_demo/src/features/energy/presentation/energy_view.dart';
+import 'package:my_mg4_dash/src/app/providers/app_settings_provider.dart';
+import 'package:my_mg4_dash/src/features/demo/presentation/demo_view.dart';
+import 'package:my_mg4_dash/src/features/energy/presentation/energy_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Widget> _wrap(Widget child) async {

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/app/providers/app_settings_provider.dart';
-import 'package:liquid_glass_demo/src/features/settings/domain/app_settings.dart';
-import 'package:liquid_glass_demo/src/features/settings/presentation/settings_view.dart';
-import 'package:liquid_glass_demo/src/features/settings/presentation/widgets/settings_detail_panel.dart';
-import 'package:liquid_glass_demo/src/features/settings/presentation/widgets/settings_nav.dart';
+import 'package:my_mg4_dash/src/app/providers/app_settings_provider.dart';
+import 'package:my_mg4_dash/src/features/settings/domain/app_settings.dart';
+import 'package:my_mg4_dash/src/features/settings/presentation/settings_view.dart';
+import 'package:my_mg4_dash/src/features/settings/presentation/widgets/settings_detail_panel.dart';
+import 'package:my_mg4_dash/src/features/settings/presentation/widgets/settings_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Widget> _wrap(Widget child) async {
@@ -33,12 +33,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
+    final view =
+        TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
     view.physicalSize = const Size(960, 360);
     view.devicePixelRatio = 1;
   });
   tearDown(() {
-    final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
+    final view =
+        TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
     view.resetPhysicalSize();
     view.resetDevicePixelRatio();
   });
@@ -67,7 +69,9 @@ void main() {
     expect(find.text('Permessi app'), findsOneWidget);
   });
 
-  testWidgets('SettingsView appearance controls update details', (tester) async {
+  testWidgets('SettingsView appearance controls update details', (
+    tester,
+  ) async {
     await tester.pumpWidget(await _wrap(const SettingsView()));
     await tester.pump(const Duration(milliseconds: 100));
 
@@ -108,7 +112,9 @@ void main() {
     expect(selected, SettingsSection.system);
   });
 
-  testWidgets('SettingsDetailPanel renders defaults and custom detail', (tester) async {
+  testWidgets('SettingsDetailPanel renders defaults and custom detail', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ScreenUtilInit(
         designSize: const Size(960, 360),

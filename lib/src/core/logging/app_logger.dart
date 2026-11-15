@@ -13,7 +13,7 @@ class AppLogger {
 
   static final AppLogger instance = AppLogger._();
 
-  static const String _fileName = 'liquid_glass_demo.log';
+  static const String _fileName = 'my_mg4_dash.log';
 
   bool _enabled = false;
   bool _installed = false;
@@ -187,11 +187,11 @@ class AppLogger {
           .toIso8601String()
           .replaceAll(':', '-')
           .replaceAll('.', '-');
-      final exportName = 'liquid_glass_demo_$stamp.log';
+      final exportName = 'my_mg4_dash_$stamp.log';
 
       for (final dir in dirs) {
         try {
-          final targetDir = Directory('${dir.path}/liquid_glass_demo_logs');
+          final targetDir = Directory('${dir.path}/my_mg4_dash_logs');
           if (!await targetDir.exists()) {
             await targetDir.create(recursive: true);
           }

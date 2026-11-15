@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_glass_demo/src/app/providers/app_settings_provider.dart';
-import 'package:liquid_glass_demo/src/features/settings/presentation/settings_view.dart';
+import 'package:my_mg4_dash/src/app/providers/app_settings_provider.dart';
+import 'package:my_mg4_dash/src/features/settings/presentation/settings_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Widget> _app() async {
@@ -13,7 +13,8 @@ Future<Widget> _app() async {
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
     child: ScreenUtilInit(
       designSize: const Size(960, 360),
-      builder: (context, _) => const MaterialApp(home: Scaffold(body: SettingsView())),
+      builder: (context, _) =>
+          const MaterialApp(home: Scaffold(body: SettingsView())),
     ),
   );
 }
@@ -30,12 +31,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
+    final view =
+        TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
     view.physicalSize = const Size(960, 360);
     view.devicePixelRatio = 1;
   });
   tearDown(() {
-    final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
+    final view =
+        TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
     view.resetPhysicalSize();
     view.resetDevicePixelRatio();
   });
@@ -47,7 +50,11 @@ void main() {
     final sliders = find.byType(Slider);
     if (sliders.evaluate().isNotEmpty) {
       await tester.ensureVisible(sliders.first);
-      await tester.drag(sliders.first, const Offset(30, 0), warnIfMissed: false);
+      await tester.drag(
+        sliders.first,
+        const Offset(30, 0),
+        warnIfMissed: false,
+      );
       await tester.pump(const Duration(milliseconds: 100));
     }
     if (sliders.evaluate().length > 1) {
@@ -64,7 +71,9 @@ void main() {
     expect(find.textContaining('Barra'), findsWidgets);
   });
 
-  testWidgets('system and mock list items show detail and snackbar', (tester) async {
+  testWidgets('system and mock list items show detail and snackbar', (
+    tester,
+  ) async {
     await tester.pumpWidget(await _app());
     await tester.pump(const Duration(milliseconds: 100));
 

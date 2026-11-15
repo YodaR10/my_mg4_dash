@@ -1,4 +1,4 @@
-package com.example.liquid_glass_demo
+package com.example.my_mg4_dash
 
 import io.flutter.embedding.android.FlutterActivity
 
