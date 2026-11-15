@@ -46,3 +46,11 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Certificates and keys
+dowloadCert.sh
+sign_platform.sh
+keys/platform.pk8
+keys/platform.x509.pem
+scripts/release_signed_beta.sh
+dist
