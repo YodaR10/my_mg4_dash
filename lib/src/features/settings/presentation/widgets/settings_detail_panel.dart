@@ -134,7 +134,7 @@ class SettingsDetailPanel extends StatelessWidget {
         SettingsSection.screen =>
           'Nascondi una o entrambe le barre di sistema per coprirle.\n\nBarra superiore: ${settings.hideTopSystemBar ? "nascosta" : "visibile"}\nBarra dei pulsanti: ${settings.hideBottomSystemBar ? "nascosta" : "visibile"}\n\nLa barra di navigazione dell’app resta sempre visibile.',
         SettingsSection.system =>
-          'Controlla aggiornamenti e informazioni software. Alcune azioni sono di esempio in questa demo.',
+          'Controlla e installa aggiornamenti da GitHub Releases.\n\nCanale: ${settings.updateChannel == AppUpdateChannel.beta ? "Beta (pre-release)" : "Stabile"}\n\nPuoi verificare la disponibilità di nuove versioni e scaricare/installare l\'APK direttamente su MG4 (se consentito dal sistema).',
         SettingsSection.audio =>
           'Spazio per impostazioni audio. Seleziona una voce al centro per i dettagli.',
         SettingsSection.connectivity =>

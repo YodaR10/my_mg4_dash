@@ -14,10 +14,12 @@ class AppSettingsRepository {
   static const kPanelBlur = 'settings.panelBlur';
   static const kPanelTintAlpha = 'settings.panelTintAlpha';
   static const kLoggingEnabled = 'settings.loggingEnabled';
+  static const kUpdateChannel = 'settings.updateChannel';
 
   AppSettings load() {
     final themeName = _prefs.getString(kThemePreference);
     final fontName = _prefs.getString(kFontSize);
+    final channelName = _prefs.getString(kUpdateChannel);
     return AppSettings(
       themePreference: AppThemePreference.values.firstWhere(
         (e) => e.name == themeName,
@@ -33,6 +35,10 @@ class AppSettingsRepository {
       panelTintAlpha:
           (_prefs.getDouble(kPanelTintAlpha) ?? 0.08).clamp(0.05, 0.90),
       loggingEnabled: _prefs.getBool(kLoggingEnabled) ?? false,
+      updateChannel: AppUpdateChannel.values.firstWhere(
+        (e) => e.name == channelName,
+        orElse: () => AppUpdateChannel.stable,
+      ),
     );
   }
 
@@ -44,5 +50,6 @@ class AppSettingsRepository {
     await _prefs.setDouble(kPanelBlur, settings.panelBlur);
     await _prefs.setDouble(kPanelTintAlpha, settings.panelTintAlpha);
     await _prefs.setBool(kLoggingEnabled, settings.loggingEnabled);
+    await _prefs.setString(kUpdateChannel, settings.updateChannel.name);
   }
 }

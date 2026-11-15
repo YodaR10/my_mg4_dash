@@ -4,6 +4,8 @@ enum AppThemePreference { system, light, dark }
 
 enum AppFontSize { small, medium, large }
 
+enum AppUpdateChannel { stable, beta }
+
 extension AppFontSizeScale on AppFontSize {
   double get scale => switch (this) {
         AppFontSize.large => 1.0,
@@ -21,6 +23,7 @@ class AppSettings {
     this.panelBlur = 1.0,
     this.panelTintAlpha = 0.08,
     this.loggingEnabled = false,
+    this.updateChannel = AppUpdateChannel.stable,
   });
 
   final AppThemePreference themePreference;
@@ -37,6 +40,9 @@ class AppSettings {
   /// Enables on-device diagnostic logging and export.
   final bool loggingEnabled;
 
+  /// Canale usato per la verifica aggiornamenti su GitHub Releases.
+  final AppUpdateChannel updateChannel;
+
   ThemeMode get themeMode => switch (themePreference) {
         AppThemePreference.system => ThemeMode.system,
         AppThemePreference.light => ThemeMode.light,
@@ -51,6 +57,7 @@ class AppSettings {
     double? panelBlur,
     double? panelTintAlpha,
     bool? loggingEnabled,
+    AppUpdateChannel? updateChannel,
   }) {
     return AppSettings(
       themePreference: themePreference ?? this.themePreference,
@@ -60,6 +67,7 @@ class AppSettings {
       panelBlur: panelBlur ?? this.panelBlur,
       panelTintAlpha: panelTintAlpha ?? this.panelTintAlpha,
       loggingEnabled: loggingEnabled ?? this.loggingEnabled,
+      updateChannel: updateChannel ?? this.updateChannel,
     );
   }
 }

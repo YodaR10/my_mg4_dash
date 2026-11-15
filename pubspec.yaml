@@ -38,6 +38,10 @@ dependencies:
   flutter_screenutil: ^5.9.3
   shared_preferences: ^2.5.4
   flutter_riverpod: ^3.5.0
+  http: ^1.6.0
+  package_info_plus: ^9.0.0
+  path_provider: ^2.1.5
+  open_filex: ^4.7.0
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/ui/adaptive_ink.dart';
+import '../../data/app_update_service.dart';
 import '../../domain/app_settings.dart';
 import '../settings_typography.dart';
 import '../settings_view.dart';
@@ -91,10 +93,10 @@ class SettingsContent extends StatelessWidget {
           onShowDetail: onShowDetail,
         );
       case SettingsSection.system:
-        return _SystemSection(
-          onNotImplemented: onNotImplemented,
+        return _SystemUpdatesSection(
+          settings: settings,
+          onUpdateSettings: onUpdateSettings,
           onShowDetail: onShowDetail,
-          fontSize: settings.fontSize,
         );
       case SettingsSection.audio:
         return _MockListSection(
@@ -407,69 +409,289 @@ class _ScreenSection extends StatelessWidget {
   }
 }
 
-class _SystemSection extends StatelessWidget {
-  const _SystemSection({
-    required this.onNotImplemented,
+class _SystemUpdatesSection extends StatefulWidget {
+  const _SystemUpdatesSection({
+    required this.settings,
+    required this.onUpdateSettings,
     required this.onShowDetail,
-    required this.fontSize,
   });
 
-  final NotImplementedCallback onNotImplemented;
+  final AppSettings settings;
+  final ValueChanged<AppSettings> onUpdateSettings;
   final DetailCallback onShowDetail;
-  final AppFontSize fontSize;
+
+  @override
+  State<_SystemUpdatesSection> createState() => _SystemUpdatesSectionState();
+}
+
+class _SystemUpdatesSectionState extends State<_SystemUpdatesSection> {
+  final AppUpdateService _service = AppUpdateService();
+  PackageInfo? _packageInfo;
+  bool _checking = false;
+  bool _downloading = false;
+  double _progress = 0;
+  String _status = 'Nessun controllo effettuato.';
+  UpdateCheckResult? _lastResult;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInfo();
+  }
+
+  Future<void> _loadInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+    setState(() => _packageInfo = info);
+    widget.onShowDetail(
+      title: 'Versione software',
+      description: _versionDescription(null),
+      icon: Icons.info_outline,
+    );
+  }
+
+  String _versionDescription(UpdateCheckResult? result) {
+    final info = _packageInfo;
+    final current = info == null
+        ? '—'
+        : '${info.version}+${info.buildNumber}';
+    final channelLabel = widget.settings.updateChannel == AppUpdateChannel.beta
+        ? 'Beta (pre-release)'
+        : 'Stabile';
+    final buf = StringBuffer()
+      ..writeln('Versione installata: $current')
+      ..writeln('Canale aggiornamenti: $channelLabel');
+    if (result != null) {
+      if (result.error != null) {
+        buf..writeln()..writeln('Errore: ${result.error}');
+      } else if (result.latest == null) {
+        buf..writeln()..writeln('Nessuna release trovata per questo canale.');
+      } else if (result.hasUpdate) {
+        final l = result.latest!;
+        buf
+          ..writeln()
+          ..writeln('Aggiornamento disponibile: ${l.versionName} (${l.tag})')
+          ..writeln(l.isPrerelease ? 'Tipo: pre-release (beta)' : 'Tipo: stabile');
+        if (l.body.trim().isNotEmpty) {
+          final notes = l.body.trim();
+          buf..writeln()..writeln('Note:')..writeln(notes.length > 600 ? '${notes.substring(0, 600)}…' : notes);
+        }
+      } else {
+        buf..writeln()..writeln('L\'app è aggiornata per il canale selezionato.');
+      }
+    } else {
+      buf..writeln()..writeln(_status);
+    }
+    return buf.toString();
+  }
+
+  Future<void> _check() async {
+    if (_checking || _downloading) return;
+    setState(() {
+      _checking = true;
+      _status = 'Controllo aggiornamenti in corso…';
+    });
+    widget.onShowDetail(
+      title: 'Verifica aggiornamenti',
+      description: _versionDescription(null),
+      icon: Icons.system_update_alt_outlined,
+    );
+    final result = await _service.check(widget.settings.updateChannel);
+    if (!mounted) return;
+    setState(() {
+      _checking = false;
+      _lastResult = result;
+      if (result.error != null) {
+        _status = 'Errore durante il controllo.';
+      } else if (result.latest == null) {
+        _status = 'Nessuna release trovata per questo canale.';
+      } else if (result.hasUpdate) {
+        _status = 'Disponibile: ${result.latest!.versionName}';
+      } else {
+        _status = 'Nessun aggiornamento disponibile.';
+      }
+    });
+    widget.onShowDetail(
+      title: 'Verifica aggiornamenti',
+      description: _versionDescription(result),
+      icon: Icons.system_update_alt_outlined,
+    );
+  }
+
+  Future<void> _downloadAndInstall() async {
+    final release = _lastResult?.latest;
+    if (release == null || _downloading) return;
+    setState(() {
+      _downloading = true;
+      _progress = 0;
+    });
+    widget.onShowDetail(
+      title: 'Aggiornamento',
+      description: 'Download di ${release.apkName} in corso…',
+      icon: Icons.download_outlined,
+    );
+    try {
+      final file = await _service.downloadApk(
+        release,
+        onProgress: (r, t) {
+          if (!mounted) return;
+          setState(() => _progress = t > 0 ? r / t : 0);
+        },
+      );
+      if (!mounted) return;
+      widget.onShowDetail(
+        title: 'Aggiornamento',
+        description:
+            'Download completato (${release.apkName}). Avvio installazione…\nConferma l\'installazione del pacchetto quando richiesto.',
+        icon: Icons.system_update_alt_outlined,
+      );
+      await _service.installApk(file);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _status = 'Errore: $e');
+      widget.onShowDetail(
+        title: 'Aggiornamento',
+        description: 'Errore durante download/installazione:\n$e',
+        icon: Icons.error_outline,
+      );
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('Aggiornamento fallito: $e'),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 4),
+            margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
+          ),
+        );
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final typo = SettingsTypography.forFontSize(widget.settings.fontSize);
+    final ink = AdaptiveInk.of(context);
+    final info = _packageInfo;
+    final current = info == null ? '—' : '${info.version}+${info.buildNumber}';
+    final result = _lastResult;
+    final hasUpdate = result?.hasUpdate == true;
+    final latest = result?.latest;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _ActionTile(
-          icon: Icons.system_update_alt_outlined,
-          title: 'Verifica aggiornamenti',
-          subtitle: 'Controlla se è disponibile una nuova versione',
-          fontSize: fontSize,
-          trailing: _ChevronIcon(fontSize: fontSize),
+        Text(
+          'Canale aggiornamenti',
+          style: TextStyle(
+            color: ink.secondary,
+            fontSize: typo.detailLabel,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        _OptionTile(
+          icon: Icons.verified_outlined,
+          title: 'Stabile',
+          subtitle: 'Solo release stabili (consigliato)',
+          selected: widget.settings.updateChannel == AppUpdateChannel.stable,
+          fontSize: widget.settings.fontSize,
           onTap: () {
-            onShowDetail(
-              title: 'Verifica aggiornamenti',
-              description:
-                  'Ultimo controllo: —\nNessun aggiornamento verificato in questa demo.',
-              icon: Icons.system_update_alt_outlined,
+            widget.onUpdateSettings(widget.settings.copyWith(updateChannel: AppUpdateChannel.stable));
+            widget.onShowDetail(
+              title: 'Canale: Stabile',
+              description: 'Verranno proposte solo le release stabili pubblicate su GitHub.',
+              icon: Icons.verified_outlined,
             );
-            onNotImplemented('Verifica aggiornamenti');
           },
         ),
         SizedBox(height: 10.h),
+        _OptionTile(
+          icon: Icons.science_outlined,
+          title: 'Beta',
+          subtitle: 'Include pre-release beta per test',
+          selected: widget.settings.updateChannel == AppUpdateChannel.beta,
+          fontSize: widget.settings.fontSize,
+          onTap: () {
+            widget.onUpdateSettings(widget.settings.copyWith(updateChannel: AppUpdateChannel.beta));
+            widget.onShowDetail(
+              title: 'Canale: Beta',
+              description: 'Verranno proposte le pre-release beta (tag con suffisso -beta) pubblicate su GitHub.',
+              icon: Icons.science_outlined,
+            );
+          },
+        ),
+        SizedBox(height: 14.h),
         _ActionTile(
           icon: Icons.info_outline,
-          title: 'Versione software',
-          subtitle: 'Informazioni sulla versione corrente',
-          fontSize: fontSize,
-          trailing: _ChevronIcon(fontSize: fontSize),
+          title: 'Versione installata',
+          subtitle: current,
+          fontSize: widget.settings.fontSize,
+          trailing: null,
           onTap: () {
-            onShowDetail(
+            widget.onShowDetail(
               title: 'Versione software',
-              description: 'Dettagli versione non disponibili in questa demo.',
+              description: _versionDescription(result),
               icon: Icons.info_outline,
             );
-            onNotImplemented('Versione software');
           },
         ),
         SizedBox(height: 10.h),
         _ActionTile(
-          icon: Icons.description_outlined,
-          title: 'Note di rilascio',
-          subtitle: 'Novità e modifiche recenti',
-          fontSize: fontSize,
-          trailing: _ChevronIcon(fontSize: fontSize),
-          onTap: () {
-            onShowDetail(
-              title: 'Note di rilascio',
-              description:
-                  'Le note di rilascio non sono disponibili in questa demo.',
-              icon: Icons.description_outlined,
-            );
-            onNotImplemented('Note di rilascio');
-          },
+          icon: Icons.system_update_alt_outlined,
+          title: _checking ? 'Controllo in corso…' : 'Verifica aggiornamenti',
+          subtitle: _status,
+          fontSize: widget.settings.fontSize,
+          trailing: _checking
+              ? SizedBox(
+                  width: 20.w,
+                  height: 20.w,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: ink.secondary,
+                  ),
+                )
+              : _ChevronIcon(fontSize: widget.settings.fontSize),
+          onTap: _check,
+        ),
+        if (hasUpdate && latest != null) ...[
+          SizedBox(height: 10.h),
+          _ActionTile(
+            icon: Icons.download_outlined,
+            title: _downloading
+                ? 'Download… ${(_progress * 100).toStringAsFixed(0)}%'
+                : 'Scarica e installa ${latest.versionName}',
+            subtitle: latest.isPrerelease
+                ? 'Pre-release beta • ${latest.apkName}'
+                : 'Release stabile • ${latest.apkName}',
+            fontSize: widget.settings.fontSize,
+            trailing: _downloading
+                ? SizedBox(
+                    width: 20.w,
+                    height: 20.w,
+                    child: CircularProgressIndicator(
+                      value: _progress > 0 ? _progress : null,
+                      strokeWidth: 2,
+                      color: ink.secondary,
+                    ),
+                  )
+                : _ChevronIcon(fontSize: widget.settings.fontSize),
+            onTap: _downloadAndInstall,
+          ),
+        ],
+        if (latest != null && latest.body.trim().isNotEmpty) ...[
+          SizedBox(height: 12.h),
+          _InfoNote(
+            fontSize: widget.settings.fontSize,
+            text: 'Note di rilascio (${latest.tag}):\n${latest.body.trim().length > 400 ? '${latest.body.trim().substring(0, 400)}…' : latest.body.trim()}',
+          ),
+        ],
+        SizedBox(height: 12.h),
+        _InfoNote(
+          fontSize: widget.settings.fontSize,
+          text:
+              'La verifica usa le Release GitHub del progetto (YodaR10/my_mg4_dash). Su MG4 l\'installazione dell\'APK richiede conferma e potrebbe dipendere dai permessi del sistema.',
         ),
       ],
     );
